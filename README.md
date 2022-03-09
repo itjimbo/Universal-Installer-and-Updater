@@ -42,7 +42,7 @@ This scipt is designed to work with Jamf. It has the ability to install any app 
     
     _Not currently in use_
     
-    /Resources/Jamf Script Parameter Labels.png
+    ![This is an image](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Jamf%20Script%20Parameter%20Labels.png)
 
 6. Click **Save**.
 
