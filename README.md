@@ -6,6 +6,8 @@ Some bullet points about this script:
 - You could create two seperate policies with different settings; one to install the app, and one to update the app. The install policy should be set to run once per computer, while the update policy could be set to run once every day, week, month, etc...
 - The script is capable of installing apps with the following installers: .dmg, .pkg, .pkg within .dmg, .zip, and .app (apps without an installer). 
 - Adding an app to the script is fairly simple. Check out the **Adding Apps to the Script** section under **Instructions** below.
+- This script does not come with a waranty or guarantee of any kind; use at your own risk. It works fine for me in my environment of ~300 Mac endpoints.
+- At times the script can and will fail or break due to changes from the app vendor's website. These issues are usually caught fairly quickly and resolved just as quick. The script will then be updated here as well.
 
 ## Instructions
 ### Adding the Script to Jamf
@@ -55,4 +57,4 @@ Some bullet points about this script:
 
 ## Versions
 **Version 2022.03.09**
-- Initial build of the script
+- Initial build of the script (in working condition)
