@@ -1,6 +1,6 @@
 # Universal-Installer-and-Updater
 
-This scipt is designed to work with Jamf. It has the ability to install any app defined within the script. Simply input parameters for the script when creating the Jamf Policy.
+This scipt is designed to work with Jamf. It has the ability to install any app defined within the script. Simply input parameters for the script when creating the Jamf Policy. You could create two seperate policies with different settings; one to install the app, and one to update the app. The script is capable of installing apps with the following installers: .dmg, .pkg, .pkg within .dmg, .zip, and .app (apps without an installer). Adding an app to the script is fairly simple. Check out the **Adding Apps to the Script** section under **Instructions** below.
 
 ## Instructions
 ### Adding the Script to Jamf
