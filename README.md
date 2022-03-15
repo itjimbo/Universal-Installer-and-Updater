@@ -39,7 +39,7 @@ Some bullet points about this script:
         
     **Parameter 9**: 
     
-    _Not currently in use_
+    -blank-
         
     **Parameter 10**: 
     
