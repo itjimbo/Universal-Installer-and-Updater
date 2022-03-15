@@ -53,6 +53,18 @@ Some bullet points about this script:
 
 6. Click **Save**.
 
+### Adding an Install Policy to Jamf
+Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
+`echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
+Example:
+`echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
+
+### Adding an Update Policy to Jamf
+Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
+`echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
+Example:
+`echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
+
 
 
 ## Versions
