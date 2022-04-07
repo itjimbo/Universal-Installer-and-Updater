@@ -74,5 +74,5 @@ Example:
 
 
 ## Versions
-**Version 2022.03.09**
-- Initial build of the script (in working condition)
+**Version 2022.04.07**
+- Initial upload of script (in working condition)
