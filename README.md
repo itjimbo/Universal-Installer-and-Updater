@@ -30,7 +30,7 @@ Some bullet points about this script:
 
     **Parameter 4**:
     
-    DEBUG MODE - [TRUE = enabled / FALSE = disabled] (If TRUE, the script will run to the point of installing the latest version. If FALSE, the script will run through completely.)
+    `DEBUG MODE - [TRUE = enabled / FALSE = disabled] (If TRUE, the script will run to the point of installing the latest version. If FALSE, the script will run through completely.)`
     
     **Parameter 5**:
     
