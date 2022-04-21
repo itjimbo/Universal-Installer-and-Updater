@@ -20,9 +20,9 @@ Some bullet points about this script:
 
 # Instructions
 ### <ins>Adding the Script to Jamf</ins>
-1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts**, and click **New**.
-2. On the **General** tab, for **Display Name** input: **Universal Installer and Updater**
-3. On the **Script** tab, copy/paste the contents of the **Universal Installer and Updater.sh** file from this repository.
+1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts** > **New**
+2. On the **General** tab for **Display Name**, input: **Universal Installer and Updater**
+3. On the **Script** tab, copy/paste the contents of the **[Universal Installer and Updater.sh](https://github.com/itjimbo/Universal-Installer-and-Updater/blob/main/Universal%20Installer%20and%20Updater.sh)** file from this repository.
 4. On the **Options** tab, choose **Before** for the **Priority** dropdown.
 5. Within the **Options** tab, copy/paste the following **Parameter Labels**:
 
