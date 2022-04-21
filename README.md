@@ -53,7 +53,7 @@ Some bullet points about this script:
 
 
 Here is how the script parameters should be set in Jamf.   
-![This is an image](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Jamf%20Script%20Parameter%20Labels.png)
+![This is an image](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20Parameter%20Labels.png)
 
 ### <ins>Explanation of Paramaters</ins>
 **Parameter 4 - DEBUG MODE**
