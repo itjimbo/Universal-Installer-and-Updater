@@ -58,31 +58,35 @@ Here is how the script parameters should be set in Jamf.
 ### <ins>Explanation of Paramaters</ins>
 **Parameter 4 - DEBUG MODE**
 
-Debug mode will run up to the point of downloading the latest installer. It will not install/update the app. This is useful for checking that everything in the script works as expected up to that point.
+> Debug mode will run up to the point of downloading the latest installer. It will not install/update the app. This is useful for checking that everything in the script works as expected up to that point.
 
 **Parameter 5 - APPLICATION NAME**
 
-This is the app's function name from within the script. It lets the script know which app the Policy is configured for.
+> This is the app's function name from within the script. It lets the script know which app the Policy is configured for.
 
 **Parameter 6 - REQUIRED DISK SPACE**
 
-Some apps are very large or may require a specified amount of disk space. This parameter will ensure the target machine has the minimum required disk space before proceeding with install/update attempts. The disk space is measured in megabytes (MB). 
+> Some apps are very large or may require a specified amount of disk space. This parameter will ensure the target machine has the minimum required disk space before proceeding with install/update attempts. The disk space is measured in megabytes (MB). 
 
 **Parameter 7 - DEFERRAL DAYS**
 
-The number of days a user is permitted to defer an update. A log is kept with the date the user first deferred. Each time the script runs, it will check if there's a deferral log. If a deferral log exists and the user defers again, the days will count down each day until the user has reached the maximum deferral limit. Once the limit has been reached, the app will forcibly update. This parameter can also be modified and it will update the user's deferral log. If a user has 5 days left on their deferral log, but a vulnerability has been identified for a certain app and you'd like the app to be updated on all machines within 2 days, simply change the parameter to two days and it will update the users deferral log the next time the Policy runs.
+> The number of days a user is permitted to defer an update. A log is kept with the date the user first deferred. Each time the script runs, it will check if there's a deferral log. If a deferral log exists and the user defers again, the days will count down each day until the user has reached the maximum deferral limit. Once the limit has been reached, the app will forcibly update. This parameter can also be modified and it will update the user's deferral log. If a user has 5 days left on their deferral log, but a vulnerability has been identified for a certain app and you'd like the app to be updated on all machines within 2 days, simply change the parameter to two days and it will update the users deferral log the next time the Policy runs.
 
 **Parameter 8 - PROMPTS**
 
-These are Jamf Helper window prompts. These include update prompts, error prompts, deferral prompts, and update complete prompts. All prompts require user interaction. Even if set to true, prompts will only appear if the app was running when the Policy ran. If the app was not running, prompts are not displayed and will not interrupt the user.
+> These are Jamf Helper window prompts. These include update prompts, error prompts, deferral prompts, and update complete prompts. All prompts require user interaction. Even if set to true, prompts will only appear if the app was running when the Policy ran. If the app was not running, prompts are not displayed and will not interrupt the user.
 
 **Parameter 9 - UPDATING WINDOW**
 
-These are Jamf Helper window prompts to inform the user an app is updating. It will only appear if the app was running when the Policy ran. No user interaction is required for this prompt. It's a small and simple window to show the user an app is updating. 
+> These are Jamf Helper window prompts to inform the user an app is updating. It will only appear if the app was running when the Policy ran. No user interaction is required for this prompt. It's a small and simple window to show the user an app is updating. 
 
 **Parameter 10 - LATEST VERSION**
 
-Some apps developer sites simply don't post release notes or include the latest version number of their app(s) anywhere. In these instances, you can still use this script by defining the latest version in this parameter.
+> Some apps developer sites simply don't post release notes or include the latest version number of their app(s) anywhere. In these instances, you can still use this script by defining the latest version in this parameter.
+
+**Parameter 11 - _Blank_**
+
+> This parameter is not currently in use.
 
 
 ### <ins>Adding an Install Policy to Jamf</ins>
