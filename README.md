@@ -1,22 +1,22 @@
+Before you begin reading, don't forget you can use GitHub's built in table of contents to jump to a section:
+
 # Universal-Installer-and-Updater
 
-### <ins>Table of Contents</ins>
-**Instructions**
-- [Adding the Script to Jamf](https://github.com/itjimbo/Universal-Installer-and-Updater#adding-the-script-to-jamf)
-- [Explanation of Paramaters](https://github.com/itjimbo/Universal-Installer-and-Updater#explanation-of-paramaters)
-[Title](URL)
-[Title](URL)
-[Title](URL)
-[Title](URL)
-
-This scipt is designed to work with Jamf. It has the ability to install any app defined within the script. Simply input a few parameters for the script when creating the Policy, and the script will take care of everything else. 
+### <ins>Summary</ins>
+This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters for the script when creating a Policy, and the script will take care of the rest. Full instructions can be found below on how to configure and add the script to Jamf, making install and update Policies, and other tips for implenting this workflow in your Jamf environment.
 
 Some bullet points about this script:
-- You could create two seperate policies with different settings; one to install an app, and one to update an app. The install policy should be set to run once per computer, while the update policy could be set to run once every day, week, month, etc...
+- You can create two seperate policies with different settings: one for installing an app, and one for updating an app.
 - The script is capable of installing apps with the following installers: .dmg, .pkg, .pkg within .dmg, .zip, and .app (apps without an installer). 
-- Adding an app to the script is fairly simple. See the **Adding Apps to the Script** section under **Instructions** below.
-- This script does not come with a waranty or guarantee of any kind; use at your own risk. It works great for me in my environment of ~300 Mac endpoints.
+- Adding an app to the script is fairly simple. See the **Adding Apps to the Script** subsection under the **Instructions** section below.
+- This script does not come with a waranty or guarantee of any kind; use at your own risk. It works great in my environment of ~300 Mac endpoints.
 - If changes are made on the app developer's website, it's possible those changes could break the script. These issues are usually caught fairly quickly and typically resolved within hours. The script will then be updated here on GitHub as well.
+
+### <ins>Workflow Outline</ins>
+1. Put the script in Jamf.
+2. Create individual Policies for each app you would like to install/update.
+3. Set the parameters under the Script payload within each Policy.
+4. Add the software titles of your choice to Patch Management in Jamf to monitor updates.
 
 # Instructions
 ### <ins>Adding the Script to Jamf</ins>
@@ -116,7 +116,8 @@ Example:
 
 `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
 
-
+### <ins>Adding Apps to the Script</ins>
+You can add new apps to the script with minimal effort. 
 
 # Versions
 **Version 2022.04.21**
