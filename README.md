@@ -21,10 +21,12 @@ Some bullet points about this script:
 # Instructions
 ### <ins>Adding the Script to Jamf</ins>
 1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts** > **New**
-2. On the **General** tab for **Display Name**, input: **Universal Installer and Updater**
+2. On the **General** tab for **Display Name**, input: **`Universal Installer and Updater`**. 
+   - [Screenshot](URL)
 3. On the **Script** tab, copy/paste the contents of the **[Universal Installer and Updater.sh](https://github.com/itjimbo/Universal-Installer-and-Updater/blob/main/Universal%20Installer%20and%20Updater.sh)** file from this repository.
-4. On the **Options** tab, choose **Before** for the **Priority** dropdown.
-5. Within the **Options** tab, copy/paste the following **Parameter Labels**:
+   - [Screenshot](URL)
+4. On the **Options** tab, choose **Before** for the **Priority** dropdown, and copy/paste the following **Parameter Labels**:.
+   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20Parameter%20Labels.png)
 
     **Parameter 4**:
     
@@ -32,37 +34,33 @@ Some bullet points about this script:
     
     **Parameter 5**:
     
-    APPLICATION NAME - (Find the application's function in the script, and copy/paste the name of the function here.)
+    `APPLICATION NAME - (Find the application's function in the script, and copy/paste the name of the function here.)`
         
     **Parameter 6**:
     
-    REQUIRED DISK SPACE - [0 = no disk space requirement / 1000 = 1 GB / 2000 = 2 GB / 10000 = 10 GB / etc...] (measured in MB)
+    `REQUIRED DISK SPACE - [0 = no disk space requirement / 1000 = 1 GB / 2000 = 2 GB / 10000 = 10 GB / etc...] (measured in MB)`
         
     **Parameter 7**:
     
-    DEFERRAL DAYS - [NA = deferral days functions are skipped / 0 = force update the app now / any number greater than or equal to 1 = the number of days the user can defer the update]
+    `DEFERRAL DAYS - [NA = deferral days functions are skipped / 0 = force update the app now / any number greater than or equal to 1 = the number of days the user can defer the update]`
         
     **Parameter 8**:
     
-    PROMPTS - [TRUE = enabled / FALSE = disabled] (If TRUE, all prompts will be shown to the user only if the app is open. If FALSE, prompts are ignored and the app will update without prompting the user, even if the app is open)
+    `PROMPTS - [TRUE = enabled / FALSE = disabled] (If TRUE, all prompts will be shown to the user only if the app is open. If FALSE, prompts are ignored and the app will update without prompting the user, even if the app is open)`
         
     **Parameter 9**: 
     
-    UPDATING WINDOW - [TRUE = enabled / FALSE = disabled] (If TRUE, a small and simple HUD will display showing that the app is in the process of updating. If FALSE, no HUD will be displayed.)
+    `UPDATING WINDOW - [TRUE = enabled / FALSE = disabled] (If TRUE, a small and simple HUD will display showing that the app is in the process of updating. If FALSE, no HUD will be displayed.)`
         
     **Parameter 10**: 
     
-    LATEST VERSION - [NA = parameter is skipped, otherwise fill in desired app version to be installed] (Only use this parameter if the latest version cannot be ontained in the app's function of the script.)
+    `LATEST VERSION - [NA = parameter is skipped, otherwise fill in desired app version to be installed] (Only use this parameter if the latest version cannot be ontained in the app's function of the script.)`
     
     **Parameter 11**: 
     
     _Not currently in use, leave parameter blank._
     
 6. Click **Save**.
-
-
-Here is how the script parameters should be set in Jamf.   
-![This is an image](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20Parameter%20Labels.png)
 
 ### <ins>Explanation of Paramaters</ins>
 **Parameter 4 - DEBUG MODE**
