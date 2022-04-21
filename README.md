@@ -1,5 +1,14 @@
 # Universal-Installer-and-Updater
 
+### <ins>Table of Contents</ins>
+**Instructions**
+- [Adding the Script to Jamf](https://github.com/itjimbo/Universal-Installer-and-Updater#adding-the-script-to-jamf)
+- [Explanation of Paramaters](https://github.com/itjimbo/Universal-Installer-and-Updater#explanation-of-paramaters)
+[Title](URL)
+[Title](URL)
+[Title](URL)
+[Title](URL)
+
 This scipt is designed to work with Jamf. It has the ability to install any app defined within the script. Simply input a few parameters for the script when creating the Policy, and the script will take care of everything else. 
 
 Some bullet points about this script:
