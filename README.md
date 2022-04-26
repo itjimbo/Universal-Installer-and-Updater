@@ -101,6 +101,7 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the General tab, fill in the following:
+      - [Jamf Screenshot](URL)
       
       a. **Display Name**: `Microsoft Word - Install`
       
@@ -109,7 +110,7 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
       c. **Trigger**: Recurring Check-in (if you also need the policy to run after enrollment, select Enrollment Complete)
       
       d. **Execution Frequency**: Once Per Computer
-3. Click on the **Scripts** payload, then click **Configure**. Search fo the **Universal Installer and Updater** script, then click **Add**.
+3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
 
       a. **DEBUG MODE**: FALSE
