@@ -97,14 +97,39 @@ Some bullet points about this script:
 
 
 ### <ins>Adding an Install Policy to Jamf</ins>
-In the steps below, Microsoft Word will be used as an example.
+In the steps below, Microsoft Word will be used as an example. Only the necessary options will be covered. This is an install policy, not an update policy. This will only install the app on machines listed in the scope.
+
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the General tab, fill in the following:
       
       a. **Display Name**: `Microsoft Word - Install`
-      b. **Enabled**: checked
-      c. **Category**: (optional)
-      d. 
+      
+      b. **Enabled**: Checked
+      
+      c. **Trigger**: Recurring Check-in (if you also need the policy to run after enrollment, select Enrollment Complete)
+      
+      d. **Execution Frequency**: Once Per Computer
+3. Click on the **Scripts** payload, then click **Configure**. Search fo the **Universal Installer and Updater** script, then click **Add**.
+4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
+
+   a. **DEBUG MODE**: FALSE
+   
+   b. **APPLICATION NAME**: MicrosoftWord
+   
+   c. **REQUIRED DISK SPACE**: 0 (or configure to your liking based on the parameter's details)
+   
+   d. **DEFERRAL DAYS**: 7 (or configure to your liking based on the parameter's details)
+   
+   e. **PROMPTS**: TRUE
+   
+   f: **UPDATING WINDOW**: TRUE 
+   
+   g. **LATEST VERSION**: NA (since the latest version is obtained in the script itself)
+   
+   h. **Paramter 11**: _blank_
+   
+5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
+6. 
 
 
 Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
