@@ -129,8 +129,10 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
       h. **Paramter 11**: _blank_
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: 
+   
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
-7. 
+6. This
+7. That..
 
 
 Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
