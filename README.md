@@ -100,10 +100,10 @@ Some bullet points about this script:
 In the steps below, Microsoft Word will be used as an example.
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the General tab, fill in the following:
-   a. **Display Name**: `Microsoft Word - Install`
-   b. **Enabled**: checked
-   c. **Category**: (optional)
-   d. 
+      a. **Display Name**: `Microsoft Word - Install`
+      b. **Enabled**: checked
+      c. **Category**: (optional)
+      d. 
 
 
 Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
