@@ -22,11 +22,11 @@ Some bullet points about this script:
 ### <ins>Adding the Script to Jamf</ins>
 1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts** > **New**
 2. On the **General** tab for **Display Name**, input: **`Universal Installer and Updater`**. 
-   - [Screenshot](URL)
+   - [Jamf Screenshot](URL)
 3. On the **Script** tab, copy/paste the contents of the **[Universal Installer and Updater.sh](https://github.com/itjimbo/Universal-Installer-and-Updater/blob/main/Universal%20Installer%20and%20Updater.sh)** file from this repository.
-   - [Screenshot](URL)
+   - [Jamf Screenshot](URL)
 4. On the **Options** tab, choose **Before** for the **Priority** dropdown, and copy/paste the following **Parameter Labels**:
-   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20Parameter%20Labels.png)
+   - [Jamf Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20Parameter%20Labels.png)
 
     **Parameter 4**:
     
@@ -128,12 +128,12 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
    
       h. **Paramter 11**: _blank_
    
-5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: 
-   
-   `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
-6. This
-7. That..
-
+5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_MicrosoftWord_iu.log | tail -n 100`
+6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
+7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
+   - [Jamf Screenshot](URL)
+   - [Self Service Screenshot](URL)
+8. Click **Save**.
 
 Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
 
