@@ -110,11 +110,9 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
       
       d. **Execution Frequency**: Once Per Computer
       
-   - [_Jamf Screenshot_](URL)
+      [_Jamf Screenshot_](URL)
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
-   
-   [Jamf Screenshot](URL)
 
       a. **DEBUG MODE**: FALSE
    
@@ -131,6 +129,8 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
       g. **LATEST VERSION**: NA (since the latest version is obtained in the script itself)
    
       h. **Paramter 11**: _blank_
+      
+      [_Jamf Screenshot_](URL)
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_MicrosoftWord_iu.log | tail -n 100`
 6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
