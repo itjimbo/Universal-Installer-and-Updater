@@ -136,7 +136,9 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
    [Jamf Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
 6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
 7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
+   
    [Jamf Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
+   
    [Self Service Screenshot](URL)
 8. Click **Save**.
 
