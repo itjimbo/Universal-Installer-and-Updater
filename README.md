@@ -100,7 +100,7 @@ Some bullet points about this script:
 In the steps below, Microsoft Word will be used as an example. Only the necessary options will be covered. This is an install policy, not an update policy. This will only install the app on machines listed in the scope.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
-2. On the General tab, fill in the following:
+2. On the **General** tab, fill in the following:
       
       a. **Display Name**: `Microsoft Word - Install`
       
@@ -110,7 +110,7 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
       
       d. **Execution Frequency**: Once Per Computer
       
-      [_Jamf Screenshot_](URL)
+      [_Jamf Screenshot_](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20General.png)
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
 
@@ -130,13 +130,14 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
    
       h. **Paramter 11**: _blank_
       
-      [_Jamf Screenshot_](URL)
+      [_Jamf Screenshot_](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_MicrosoftWord_iu.log | tail -n 100`
+   [Jamf Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
 6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
 7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
-   - [Jamf Screenshot](URL)
-   - [Self Service Screenshot](URL)
+   [Jamf Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
+   [Self Service Screenshot](URL)
 8. Click **Save**.
 
 Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
