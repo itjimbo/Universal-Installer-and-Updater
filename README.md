@@ -133,6 +133,7 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
       [_Jamf Screenshot_](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_MicrosoftWord_iu.log | tail -n 100`
+   
    [Jamf Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
 6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
 7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
