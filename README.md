@@ -112,24 +112,25 @@ In the steps below, Microsoft Word will be used as an example. Only the necessar
 3. Click on the **Scripts** payload, then click **Configure**. Search fo the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
 
-   a. **DEBUG MODE**: FALSE
+      a. **DEBUG MODE**: FALSE
    
-   b. **APPLICATION NAME**: MicrosoftWord
+      b. **APPLICATION NAME**: MicrosoftWord
    
-   c. **REQUIRED DISK SPACE**: 0 (or configure to your liking based on the parameter's details)
+      c. **REQUIRED DISK SPACE**: 0 (or configure to your liking based on the parameter's details)
    
-   d. **DEFERRAL DAYS**: 7 (or configure to your liking based on the parameter's details)
+      d. **DEFERRAL DAYS**: 7 (or configure to your liking based on the parameter's details)
    
-   e. **PROMPTS**: TRUE
+      e. **PROMPTS**: TRUE
    
-   f: **UPDATING WINDOW**: TRUE 
+      f: **UPDATING WINDOW**: TRUE 
    
-   g. **LATEST VERSION**: NA (since the latest version is obtained in the script itself)
+      g. **LATEST VERSION**: NA (since the latest version is obtained in the script itself)
    
-   h. **Paramter 11**: _blank_
+      h. **Paramter 11**: _blank_
    
-5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
-6. 
+5. Click on the **Files and Processes** payload, then click **Configure**. For the Execute Command option, copy/paste: 
+   `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
+7. 
 
 
 Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
