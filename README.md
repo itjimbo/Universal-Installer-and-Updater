@@ -3,7 +3,7 @@ Before you begin reading, don't forget you can use GitHub's built in table of co
 # Universal-Installer-and-Updater
 
 ### <ins>Summary</ins>
-This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters for the script when creating a Policy, and the script will take care of the rest. Full instructions can be found below on how to configure and add the script to Jamf, making install and update Policies, and other tips for implenting this workflow in your Jamf environment.
+This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters for the script when creating a Policy, and the script will take care of the rest. Full instructions below on how to configure and add the script to Jamf, creating install and update Policies, and other tips for implenting this workflow in your Jamf environment.
 
 Some bullet points about this script:
 - You can create two seperate policies with different settings: one for installing an app, and one for updating an app.
@@ -13,10 +13,10 @@ Some bullet points about this script:
 - If changes are made on the app developer's website, it's possible those changes could break the script. These issues are usually caught fairly quickly and typically resolved within hours. The script will then be updated here on GitHub as well.
 
 ### <ins>Workflow Outline</ins>
-1. Put the script in Jamf.
+1. Add the script to Jamf.
 2. Create individual Policies for each app you would like to install/update.
 3. Set the parameters under the Script payload within each Policy.
-4. Add the software titles of your choice to Patch Management in Jamf to monitor updates.
+4. Add software titles of your choice to Patch Management to monitor updates.
 
 # Instructions
 ### <ins>Adding the Script to Jamf</ins>
@@ -25,7 +25,7 @@ Some bullet points about this script:
    - [Screenshot](URL)
 3. On the **Script** tab, copy/paste the contents of the **[Universal Installer and Updater.sh](https://github.com/itjimbo/Universal-Installer-and-Updater/blob/main/Universal%20Installer%20and%20Updater.sh)** file from this repository.
    - [Screenshot](URL)
-4. On the **Options** tab, choose **Before** for the **Priority** dropdown, and copy/paste the following **Parameter Labels**:.
+4. On the **Options** tab, choose **Before** for the **Priority** dropdown, and copy/paste the following **Parameter Labels**:
    - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20Parameter%20Labels.png)
 
     **Parameter 4**:
@@ -97,6 +97,15 @@ Some bullet points about this script:
 
 
 ### <ins>Adding an Install Policy to Jamf</ins>
+In the steps below, Microsoft Word will be used as an example.
+1. In Jamf, navigate to **Computers** > **Policies** > **New**
+2. On the General tab, fill in the following:
+   a. **Display Name**: `Microsoft Word - Install`
+   b. **Enabled**: checked
+   c. **Category**: (optional)
+   d. 
+
+
 Under the **Files and Processes** payload, add the following command to the **Execute Command** code block.
 
 `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_<APP_NAME>_iu.log | tail -n 100`
