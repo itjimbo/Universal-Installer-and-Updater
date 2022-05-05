@@ -3,7 +3,7 @@
 ################################################################################
 #                                                                              #
 # Title:    Universal Installer and Updater                                    #
-# Version:  2022.04.19                                                         #
+# Version:  2022.05.05                                                         #
 # Author:   github.com/itjimbo                                                 #
 #                                                                              #
 ################################################################################
@@ -13,6 +13,31 @@
 ################################################################################
 #                         ADD APPS BETWEEN HERE...                             #
 ################################################################################
+
+# DO NOT USE. STILL IN TESTING.
+function AndroidStudio() {
+  appName="Android Studio"
+  appHomeDirectory="/Applications"
+  installerType="dmg"
+  latestVersion=$(curl "https://developer.android.com/studio#downloads" | grep "mac.dmg" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
+  armDownloadURL="https://redirector.gvt1.com/edgedl/android/studio/install/${latestVersion}/android-studio-${latestVersion}-mac_arm.dmg"
+  intelDownloadURL="https://redirector.gvt1.com/edgedl/android/studio/install/${latestVersion}/android-studio-${latestVersion}-mac.dmg"
+  universalDownloadURL=""
+  appIcon="studio"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="EQHXZ8M8AV"
+  volumeName=$(hdiutil info | grep "Android Studio" | sed 's/^.*Volumes\///')
+  pkgName=""
+  checksumAvailable="TRUE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$()
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
 
 function AppCleaner() {
   appName="AppCleaner"
@@ -98,6 +123,31 @@ function Docker() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="9BNSXJN65R"
   volumeName="Docker"
+  pkgName=""
+  checksumAvailable="FALSE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$()
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
+
+# DO NOT USE. STILL IN TESTING.
+function EclipseIDEForEnterpriseJavaAndWebDevelopers() {
+  appName="Eclipse"
+  appHomeDirectory="/Applications"
+  installerType="dmg"
+  latestVersion=$()
+  armDownloadURL="https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2022-03/R/eclipse-jee-2022-03-R-macosx-cocoa-aarch64.dmg"
+  intelDownloadURL="https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2022-03/R/eclipse-jee-2022-03-R-macosx-cocoa-x86_64.dmg"
+  universalDownloadURL=""
+  appIcon="app"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="EQHXZ8M8AV"
+  volumeName="Google Chrome"
   pkgName=""
   checksumAvailable="FALSE"
   armChecksumFromSite=$()
@@ -486,9 +536,9 @@ function MozillaFirefox() {
   checksumAvailable="TRUE"
   armChecksumFromSite=$()
   armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl "https://archive.mozilla.org/pub/firefox/releases/${latestVersion}/SHA256SUMS" | grep "mac/en-US/Firefox ${latestVersion}.dmg" | awk {'print $1'})
+  intelChecksumFromSite=$()
   intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
+  universalChecksumFromSite=$(curl "https://archive.mozilla.org/pub/firefox/releases/${latestVersion}/SHA256SUMS" | grep "mac/en-US/Firefox ${latestVersion}.dmg" | awk {'print $1'})
   universalChecksumFileDownload=""
 }
 
@@ -715,7 +765,7 @@ function errorPrompt() {
   -title "${appName} Update" \
   -heading "${appName} Update Fail" \
   -alignHeading natural \
-  -description "${appName} failed to update. Your IT administrator has been notified. The previous version of ${appName} will be restored." \
+  -description "${appName} failed to update. Your IT administrator has been notified. The previous version of ${appName} has been restored." \
   -lockHUD \
   -button1 "OK"`
 }
@@ -1172,11 +1222,13 @@ function compareVersions() {
   elif [[ "${installedVersionCondensed}" == "${latestVersionCondensed}" ]]; then
     echo "`date` - Is the latest version of ${appName} installed: Yes"
     echo "`date` - Abort mission..."
+    cleanUp
     exit 0
   elif [[ "${installedVersionCondensed}" -gt "${latestVersionCondensed}" ]]; then
     echo "`date` - Is the latest version of ${appName} installed: Yes"
     echo "`date` - A newer version of ${appName} is installed than that available from the app's site."
     echo "`date` - Abort mission..."
+    cleanUp
     exit 0
   else
     echo "`date` - Is the latest version of ${appName} installed: No"
@@ -1386,6 +1438,8 @@ function quitApp() {
     installerVariables
   fi
 }
+
+#------------------------------------------------------------------------------#
 
 function displayUpdatingWindow() {
   if [[ "${updatingWindow}" == "TRUE" ]]; then
@@ -2084,7 +2138,9 @@ function modifyApp() {
 function restoreApp() {
   echo "`date` - Restoring previous version of ${appName}..."
   mv "${appFullTempDirectory}" "${appHomeDirectory}"
-  echo "`date` - ${appName} has been restored to version ${appInstalledVersion}."
+  installedVersion=$(defaults read ${plistDirectory} ${plistVersionString})
+  echo "`date` - ${appName} has been restored to version ${installedVersion}."
+
 }
 
 #------------------------------------------------------------------------------#
@@ -2093,12 +2149,24 @@ function restoreApp() {
 function cleanUpPreInstall() {
   echo "`date` - Cleaning up potential leftover files from previous install attempts..."
   hdiutil detach $(/bin/df | /usr/bin/grep "${volumeName}" | awk '{print $1}') -quiet
-  rm -rf /usr/local/${appName}.app
-  rm -rf /private/tmp/${appNameCondensed}.${installerType}
-  rm -rf /private/tmp/${appNameCondensed}-Installer-Checksum.txt
-  rm -rf /private/tmp/${appNameCondensed}-Site-Checksum.txt
-  rm -rf /private/tmp/${pkgName}.pkg
-  rm -rf /private/tmp/__MACOSX
+
+  # Deletes the previous version of app from /usr/local.
+  rm -rf "/usr/local/${appName}.app"
+
+  # Deletes the downloaded installer from the /private/tmp directory.
+  rm -rf "/private/tmp/${appNameCondensed}.${installerType}"
+
+  # Deletes the installer checksum file.
+  rm -rf "/private/tmp/${appNameCondensed}-Installer-Checksum.txt"
+
+  # Deletes the checksum file created or downloaded from the app's site.
+  rm -rf "/private/tmp/${appNameCondensed}-Site-Checksum.txt"
+
+  # Deletes the PKG file for the installer.
+  rm -rf "/private/tmp/${pkgName}.pkg"
+
+  # Deletes any previously unzipped temp files from the /private/tmp directory.
+  rm -rf "/private/tmp/__MACOSX"
 }
 
 #------------------------------------------------------------------------------#
@@ -2107,12 +2175,26 @@ function cleanUpPreInstall() {
 function cleanUp() {
   echo "`date` - Cleaning up files..."
   hdiutil detach $(/bin/df | /usr/bin/grep "${volumeName}" | awk '{print $1}') -quiet
-  rm -rf "${appFullTempDirectory}"
-  rm -rf "${installerFullDirectory}"
-  rm -rf "${installerChecksumFullDirectory}"
-  rm -rf "${checksumFullDirectory}"
-  rm -rf "${pkgNewFullDirectory}"
-  rm -rf "${jamfHelperDeferralLog}"
+
+  # Deletes the previous version of app from /usr/local.
+  rm -rf "/usr/local/${appName}.app"
+
+  # Deletes the downloaded installer from the /private/tmp directory.
+  rm -rf "/private/tmp/${appNameCondensed}.${installerType}"
+
+  # Deletes the installer checksum file.
+  rm -rf "/private/tmp/${appNameCondensed}-Installer-Checksum.txt"
+
+  # Deletes the checksum file created or downloaded from the app's site.
+  rm -rf "/private/tmp/${appNameCondensed}-Site-Checksum.txt"
+
+  # Deletes the PKG file for the installer.
+  rm -rf "/private/tmp/${pkgName}.pkg"
+
+  # Deletes the deferral log.
+  rm -rf "/Library/Logs/jamf_${appNameCondensed}_d.log"
+
+  # Deletes any previously unzipped temp files from the /private/tmp directory.
   rm -rf "/private/tmp/__MACOSX"
 }
 
@@ -2159,13 +2241,9 @@ function missionAccomplished() {
 function abortMission() {
   restoreApp
   cleanUp
+  killall jamfHelper
   openApp
-
-  if [[ "${errorPrompt}" == "true" ]]; then
-    echo "`date` - Prompting user of error..."
-    errorPrompt
-  fi
-
+  errorPrompt
   echo "`date` - Abort mission..."
   exit 1
 }
