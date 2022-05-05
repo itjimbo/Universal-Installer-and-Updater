@@ -164,6 +164,15 @@ Example:
 You can add new apps to the script with minimal effort. 
 
 # Versions
+**Version 2022.05.05**
+- Fixed MozillaFirefox function where checksum command was in wrong variable
+- Updated errorPrompt JamfHelper description
+- Added cleanUp function to compareVersions function to delete the deferral log if the installed version is greater than or equal to the latest version
+- Added installedVersion variable to restoreApp function to fix an issue where jamfHelper was not showing the version an app was restored to
+- Updated the cleanUpPreInstall and cleanUp functions
+- Updated abortMission function to remove obsolete IF statement, and added a killall for jamfHelper
+
+
 **Version 2022.04.21**
 - Initial upload of script to GitHub
 - Script is in a working state
