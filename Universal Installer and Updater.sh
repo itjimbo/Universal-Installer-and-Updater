@@ -3,12 +3,45 @@
 ################################################################################
 #                                                                              #
 # Title:    Universal Installer and Updater                                    #
-# Version:  2022.05.05                                                         #
+# Version:  2022.05.20                                                         #
 # Author:   github.com/itjimbo                                                 #
 #                                                                              #
 ################################################################################
 
+# List of applications this script can install/update:
 
+# Android Studio
+# AppCleaner
+# Atom
+# Beyond Compare
+# Citrix Workspace
+# Craft Manager
+# Docker
+# Eclipse IDE For Enterprise Java And Web Developers
+# Figma
+# Google Chrome
+# JetBrains AppCode
+# JetBrains DataGrip
+# JetBrains IntelliJ IDEA CE
+# JetBrains PyCharm CE
+# JetBrains RubyMine
+# JetBrains WebStorm
+# Microsoft Excel
+# Microsoft OneDrive
+# Microsoft Outlook
+# Microsoft PowerPoint
+# Microsoft Teams
+# Microsoft Visual Studio Code
+# Microsoft Word
+# Miro
+# Mozilla Firefox
+# pgAdmin
+# Postman
+# Python 3
+# Sketch
+# Slack
+# Wireshark
+# VMwareFusion
 
 ################################################################################
 #                         ADD APPS BETWEEN HERE...                             #
@@ -43,7 +76,7 @@ function AppCleaner() {
   appName="AppCleaner"
   appHomeDirectory="/Applications"
   installerType="zip"
-  latestVersion=$(curl -s "https://freemacsoft.net/appcleaner/" | grep "Version" | grep -Eo "[0-9]+[.0-9]*" | head -1)
+  latestVersion=$(curl -s "https://freemacsoft.net/appcleaner/" | grep "Version" | grep -Eo "[0-9]+[.0-9]*" | head -1 | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://freemacsoft.net/downloads/AppCleaner_${latestVersion}.zip"
@@ -68,7 +101,7 @@ function Atom() {
   appName="Atom"
   appHomeDirectory="/Applications"
   installerType="zip"
-  latestVersion=$(curl -fsL "https://atom.io/" | grep '"version"' | grep -Eo '[0-9]+[.0-9]+[.0-9]+')
+  latestVersion=$(curl -fsL "https://atom.io/" | grep '"version"' | grep -Eo "[0-9]+[.0-9]*" | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://atom-installer.github.com/v${latestVersion}/atom-mac.zip"
@@ -88,12 +121,38 @@ function Atom() {
 
 #------------------------------------------------------------------------------#
 
+function BeyondCompare() {
+  appName="Beyond Compare"
+  appHomeDirectory="/Applications"
+  installerType="zip"
+  latestVersionNumber=$(curl "https://www.scootersoftware.com/download.php" | grep "Current Version" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
+  latestBuildNumber=$(curl "https://www.scootersoftware.com/download.php" | grep "Current Version" | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/[^ -~]//g')
+  latestVersion="${latestVersionNumber}.${latestBuildNumber}"
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://www.scootersoftware.com/BCompareOSX-${latestVersion}.zip"
+  appIcon="Beyond Compare"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="BS29TEJF86"
+  volumeName=""
+  pkgName=""
+  checksumAvailable="FALSE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$()
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
+
 # DO NOT USE. STILL IN TESTING.
 function CitrixWorkspace() {
   appName="Citrix Workspace"
   appHomeDirectory="/Applications"
   installerType="pkg.dmg"
-  latestVersion=$(curl "https://www.citrix.com/downloads/workspace-app/mac/workspace-app-for-mac-latest.html" | grep "<p>Version" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | head -1)
+  latestVersion=$(curl "https://www.citrix.com/downloads/workspace-app/mac/workspace-app-for-mac-latest.html" | grep "<p>Version" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
   downloadURL=$(curl -s -L "https://www.citrix.com/downloads/workspace-app/mac/workspace-app-for-mac-latest.html#ctx-dl-eula-external" | grep "dmg?" | sed "s/.*rel=.\(.*\)..id=.*/\1/" | sed "s/\/\//https:\/\//g")
   appIcon="025_Receiver_Combo_Mac"
   plistVersionString="CitrixVersionString"
@@ -111,14 +170,40 @@ function CitrixWorkspace() {
 
 #------------------------------------------------------------------------------#
 
+function CraftManager() {
+  appName="CraftManager"
+  appHomeDirectory="/Applications"
+  installerType="zip"
+  latestVersion=$(curl https://craft-assets.invisionapp.com/CraftManager/production/appcast.xml | grep "Version" | head -1 | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://craft-assets.invisionapp.com/CraftManager/production/CraftManager.zip"
+  appIcon="app"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="VRXQSNCL5W"
+  volumeName=""
+  pkgName=""
+  checksumAvailable="FALSE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$()
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
+
 # DO NOT USE. STILL IN TESTING.
-# Not working. Docker not quitting correctly.
+# Docker will not quit will killall command. Implement JamfHelper that will prompt user to quit the app.
 function Docker() {
   appName="Docker"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl -s "https://docs.docker.com/desktop/mac/release-notes/" | grep "docker-desktop" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | head -2 | tail -1)
-  downloadURL="https://desktop.docker.com/mac/main/amd64/Docker.dmg"
+  latestVersion=$(curl "https://docs.docker.com/desktop/release-notes/" | grep "docker-desktop" | grep -Eo "[0-9]+[.0-9]*" | head -3 | tail -1 | sed 's/[^ -~]//g')
+  armDownloadURL="https://desktop.docker.com/mac/main/arm64/Docker.dmg"
+  intelDownloadURL="https://desktop.docker.com/mac/main/amd64/Docker.dmg"
+  universalDownloadURL=""
   appIcon="AppIcon"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="9BNSXJN65R"
@@ -135,19 +220,19 @@ function Docker() {
 
 #------------------------------------------------------------------------------#
 
-# DO NOT USE. STILL IN TESTING.
 function EclipseIDEForEnterpriseJavaAndWebDevelopers() {
   appName="Eclipse"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$()
-  armDownloadURL="https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2022-03/R/eclipse-jee-2022-03-R-macosx-cocoa-aarch64.dmg"
-  intelDownloadURL="https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2022-03/R/eclipse-jee-2022-03-R-macosx-cocoa-x86_64.dmg"
+  latestStableRelease=$(curl "https://www.eclipse.org/downloads/" | grep "&#8209;" | sed "s/&#8209;/-/g" | tail -1 | grep -Eo "[0-9]+[-0-9]*" | tail -2 | head -1 | sed 's/[^ -~]//g')
+  latestVersion=$(curl "https://www.eclipse.org/downloads/packages/" | grep "Eclipse ${latestStableRelease}" | grep -Eo "[0-9]+[.0-9]*" | tail -1 | sed 's/[^ -~]//g')
+  armDownloadURL="https://mirrors.jevincanders.net/eclipse/technology/epp/downloads/release/${latestStableRelease}/R/eclipse-jee-${latestStableRelease}-R-macosx-cocoa-aarch64.dmg"
+  intelDownloadURL="https://mirrors.jevincanders.net/eclipse/technology/epp/downloads/release/${latestStableRelease}/R/eclipse-jee-${latestStableRelease}-R-macosx-cocoa-x86_64.dmg"
   universalDownloadURL=""
-  appIcon="app"
+  appIcon="Eclipse"
   plistVersionString="CFBundleShortVersionString"
-  officialTeamIdentifier="EQHXZ8M8AV"
-  volumeName="Google Chrome"
+  officialTeamIdentifier="JCDTMS22B4"
+  volumeName="Eclipse"
   pkgName=""
   checksumAvailable="FALSE"
   armChecksumFromSite=$()
@@ -160,11 +245,38 @@ function EclipseIDEForEnterpriseJavaAndWebDevelopers() {
 
 #------------------------------------------------------------------------------#
 
+# Figma uses a custom installer in this script. Check the 'determineInstaller' and 'installLatestFromFigmaZip' functions.
+# Figma uses this installer: https://github.com/figma/dynamic-universal-app
+function Figma() {
+  appName="Figma"
+  appHomeDirectory="/Applications"
+  installerType="Figma.zip"
+  latestVersion=$(curl -fsL https://desktop.figma.com/mac/RELEASE.json | awk -F '"' '{ print $8 }' | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://desktop.figma.com/mac-installer/Figma.zip"
+  appIcon="electron"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="T8RA8NE3B7"
+  volumeName=""
+  pkgName=""
+  checksumAvailable="FALSE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$()
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
+
+# curl -s https://omahaproxy.appspot.com/history | grep "mac_arm64,stable" | head -1 | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1
 function GoogleChrome() {
   appName="Google Chrome"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl -s https://omahaproxy.appspot.com/history | awk -F',' '/mac_arm64,stable/{print $3; exit}')
+  latestVersion=$(curl -s https://omahaproxy.appspot.com/history | awk -F ',' '/mac_arm64,stable/{print $3; exit}' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg"
@@ -190,8 +302,8 @@ function JetBrainsAppCode() {
   installerType="dmg"
   armDownloadURL="https://download.jetbrains.com/product?code=AC&latest&distribution=macM1"
   intelDownloadURL="https://download.jetbrains.com/product?code=AC&latest&distribution=mac"
-  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   universalDownloadURL=""
+  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   appIcon="appcode"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
@@ -214,8 +326,8 @@ function JetBrainsDataGrip() {
   installerType="dmg"
   armDownloadURL="https://download.jetbrains.com/product?code=DG&latest&distribution=macM1"
   intelDownloadURL="https://download.jetbrains.com/product?code=DG&latest&distribution=mac"
-  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   universalDownloadURL=""
+  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   appIcon="datagrip"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
@@ -238,8 +350,8 @@ function JetBrainsIntelliJIDEACE() {
   installerType="dmg"
   armDownloadURL="https://download.jetbrains.com/product?code=IIC&latest&distribution=macM1"
   intelDownloadURL="https://download.jetbrains.com/product?code=IIC&latest&distribution=mac"
-  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   universalDownloadURL=""
+  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   appIcon="idea"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
@@ -262,8 +374,8 @@ function JetBrainsPyCharmCE() {
   installerType="dmg"
   armDownloadURL="https://download.jetbrains.com/product?code=PCC&latest&distribution=macM1"
   intelDownloadURL="https://download.jetbrains.com/product?code=PCC&latest&distribution=mac"
-  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   universalDownloadURL=""
+  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   appIcon="pycharm"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
@@ -286,8 +398,8 @@ function JetBrainsRubyMine() {
   installerType="dmg"
   armDownloadURL="https://download.jetbrains.com/product?code=RM&latest&distribution=macM1"
   intelDownloadURL="https://download.jetbrains.com/product?code=RM&latest&distribution=mac"
-  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   universalDownloadURL=""
+  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   appIcon="rubymine"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
@@ -310,8 +422,8 @@ function JetBrainsWebStorm() {
   installerType="dmg"
   armDownloadURL="https://download.jetbrains.com/product?code=WS&latest&distribution=macM1"
   intelDownloadURL="https://download.jetbrains.com/product?code=WS&latest&distribution=mac"
-  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   universalDownloadURL=""
+  latestVersion=$(curl -fsIL "${armDownloadURL}" | grep -i "location" | tail -1 | sed -E 's/.*\/[a-zA-Z-]*-([0-9.]*).*[-.].*dmg/\1/g' | sed 's/[^ -~]//g')
   appIcon="webstorm"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
@@ -332,7 +444,7 @@ function MicrosoftExcel() {
   appName="Microsoft Excel"
   appHomeDirectory="/Applications"
   installerType="pkg"
-  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525135" | grep "filename=" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525135" | grep "filename=" | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://go.microsoft.com/fwlink/?linkid=525135"
@@ -356,7 +468,7 @@ function MicrosoftOneDrive() {
   appName="OneDrive"
   appHomeDirectory="/Applications"
   installerType="pkg"
-  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=823060" | grep "Location:" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=823060" | grep "Location:" | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://go.microsoft.com/fwlink/?linkid=823060"
@@ -380,7 +492,7 @@ function MicrosoftOutlook() {
   appName="Microsoft Outlook"
   appHomeDirectory="/Applications"
   installerType="pkg"
-  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525137" | grep "filename=" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525137" | grep "filename=" | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://go.microsoft.com/fwlink/?linkid=525137"
@@ -404,7 +516,7 @@ function MicrosoftPowerPoint() {
   appName="Microsoft PowerPoint"
   appHomeDirectory="/Applications"
   installerType="pkg"
-  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525136" | grep "filename=" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525136" | grep "filename=" | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://go.microsoft.com/fwlink/?linkid=525136"
@@ -428,7 +540,7 @@ function MicrosoftTeams() {
   appName="Microsoft Teams"
   appHomeDirectory="/Applications"
   installerType="pkg"
-  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=869428" | grep "location:" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=869428" | grep "location:" | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://go.microsoft.com/fwlink/?linkid=869428"
@@ -448,14 +560,14 @@ function MicrosoftTeams() {
 
 #------------------------------------------------------------------------------#
 
-# DO NOT USE. STILL IN TESTING.
-# Not working. Getting error the some directories cannot be accessed when update finished.
 function MicrosoftVisualStudioCode() {
   appName="Visual Studio Code"
   appHomeDirectory="/Applications"
   installerType="zip"
-  latestVersion=$(curl -fsL "https://code.visualstudio.com/Updates" | grep "darwin-universal" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | head -1)
-  downloadURL="https://go.microsoft.com/fwlink/?LinkID=2156837"
+  latestVersion=$(curl -fsL "https://code.visualstudio.com/Updates" | grep "darwin-universal" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://go.microsoft.com/fwlink/?LinkID=2156837"
   appIcon="Code"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="UBF8T346G9"
@@ -476,7 +588,7 @@ function MicrosoftWord() {
   appName="Microsoft Word"
   appHomeDirectory="/Applications"
   installerType="pkg"
-  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525134" | grep "filename=" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fsIL "https://go.microsoft.com/fwlink/?linkid=525134" | grep "filename=" | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://go.microsoft.com/fwlink/?linkid=525134"
@@ -496,6 +608,7 @@ function MicrosoftWord() {
 
 #------------------------------------------------------------------------------#
 
+# Miro policy must use the LATEST VERSION parameter as it cannot currently be obtained online.
 function Miro() {
   appName="Miro"
   appHomeDirectory="/Applications"
@@ -520,11 +633,12 @@ function Miro() {
 
 #------------------------------------------------------------------------------#
 
+# curl "https://www.mozilla.org/en-US/firefox/releases/" | grep -Eo 'data-latest-firefox.{0,15}' | grep -Eo '[0-9]+[.0-9]*'
 function MozillaFirefox() {
   appName="Firefox"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl "https://www.mozilla.org/en-US/firefox/releases/" | grep -Eo 'data-latest-firefox.{0,15}' | grep -Eo "[0-9]+[.0-9]*")
+  latestVersion=$(curl "https://www.mozilla.org/en-US/firefox/releases/" | grep 'data-latest-firefox' | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://download-installer.cdn.mozilla.net/pub/firefox/releases/${latestVersion}/mac/en-US/Firefox%20${latestVersion}.dmg"
@@ -548,7 +662,7 @@ function pgAdmin() {
   appName="pgAdmin 4"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl -s "https://pgadmin-archive.postgresql.org/pgadmin4/index.html" | grep -Eo '[0-9]+[.0-9]+[.0-9]+' | tail -1)
+  latestVersion=$(curl -s "https://pgadmin-archive.postgresql.org/pgadmin4/index.html" | grep -Eo '[0-9]+[.0-9]*' | tail -4 | head -1 | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${latestVersion}/macos/pgadmin4-${latestVersion}.dmg"
@@ -572,7 +686,7 @@ function Postman() {
   appName="Postman"
   appHomeDirectory="/Applications"
   installerType="zip"
-  latestVersion=$(curl -I "https://dl.pstmn.io/download/latest/osx_64" | grep "filename" | grep -Eo '[0-9]+[.0-9]+[.0-9]+')
+  latestVersion=$(curl -sI "https://dl.pstmn.io/download/latest/osx_64" | grep "Content-Disposition" | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/[^ -~]//g')
   armDownloadURL="https://dl.pstmn.io/download/latest/osx_arm64"
   intelDownloadURL="https://dl.pstmn.io/download/latest/osx_64"
   universalDownloadURL="https://dl.pstmn.io/download/latest/osx_64"
@@ -592,11 +706,36 @@ function Postman() {
 
 #------------------------------------------------------------------------------#
 
+function Python3() {
+  appName="Python Launcher"
+  installerType="pkg"
+  latestVersion=$(curl -s "https://www.python.org/downloads/macos/" | grep "Latest" | head -1 | grep -Eo '[0-9]+[.0-9]*' | tail -1 | sed 's/[^ -~]//g')
+  latestActiveRelease=$(echo ${latestVersion} | awk -F. '{print $1 "." $2}')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://www.python.org/ftp/python/${latestVersion}/python-${latestVersion}-macos11.pkg"
+  appHomeDirectory="/Applications/Python ${latestActiveRelease}"
+  appIcon="PythonLauncher"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="DJ3H93M7VJ"
+  volumeName=""
+  pkgName=""
+  checksumAvailable="FALSE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$()
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
+
 function Sketch() {
   appName="Sketch"
   appHomeDirectory="/Applications"
   installerType="zip"
-  latestVersion=$(curl -fs "https://www.sketch.com/updates/" | grep "Download Sketch Version" | head -1 | sed -E 's/.*Version ([0-9.]*)<.*/\1/g')
+  latestVersion=$(curl -fs "https://www.sketch.com/updates/" | grep "Download Sketch Version" | head -1 | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="http://download.sketchapp.com/sketch.zip"
@@ -616,14 +755,16 @@ function Sketch() {
 
 #------------------------------------------------------------------------------#
 
+# Additional download URLs:
+# armDownloadURL="https://downloads.slack-edge.com/releases/macos/${latestVersion}/prod/arm64/Slack-${latestVersion}-macOS.dmg"
+# intelDownloadURL="https://downloads.slack-edge.com/releases/macos/${latestVersion}/prod/x64/Slack-${latestVersion}-macOS.dmg"
+# universalDownloadURL="https://downloads.slack-edge.com/releases/macos/${latestVersion}/prod/universal/Slack-${latestVersion}-macOS.dmg"
+
 function Slack() {
   appName="Slack"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl -I https://slack.com/ssb/download-osx | grep "location" | grep -Eo "[0-9]+[.0-9]*" | tail -1)
-  #armDownloadURL="https://downloads.slack-edge.com/releases/macos/${latestVersion}/prod/arm64/Slack-${latestVersion}-macOS.dmg"
-  #intelDownloadURL="https://downloads.slack-edge.com/releases/macos/${latestVersion}/prod/x64/Slack-${latestVersion}-macOS.dmg"
-  #universalDownloadURL="https://downloads.slack-edge.com/releases/macos/${latestVersion}/prod/universal/Slack-${latestVersion}-macOS.dmg"
+  latestVersion=$(curl -sI https://slack.com/ssb/download-osx | grep "location" | grep -Eo "[0-9]+[.0-9]*" | tail -1 | sed 's/[^ -~]//g')
   armDownloadURL="https://slack.com/ssb/download-osx-silicon"
   intelDownloadURL="https://slack.com/ssb/download-osx"
   universalDownloadURL="https://slack.com/ssb/download-osx-universal"
@@ -647,7 +788,7 @@ function Wireshark() {
   appName="Wireshark"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl -s https://www.wireshark.org/docs/relnotes/ | grep ".html" | grep -Eo "[0-9]+[.0-9]*" | head -4 | tail -1)
+  latestVersion=$(curl -s https://www.wireshark.org/docs/relnotes/ | grep ".html" | grep -Eo "[0-9]+[.0-9]*" | head -4 | tail -1 | sed 's/[^ -~]//g')
   armDownloadURL="https://1.as.dl.wireshark.org/osx/Wireshark%20Latest%20Arm%2064.dmg"
   intelDownloadURL="https://1.as.dl.wireshark.org/osx/Wireshark%20Latest%20Intel%2064.dmg"
   universalDownloadURL=""
@@ -673,7 +814,7 @@ function VMwareFusion() {
   appName="VMware Fusion"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl -I https://slack.com/ssb/download-osx | grep "location" | grep -Eo "[0-9]+[.0-9]*" | tail -1)
+  latestVersion=$(curl -sI https://slack.com/ssb/download-osx | grep "location" | grep -Eo "[0-9]+[.0-9]*" | tail -1 | sed 's/[^ -~]//g')
   downloadURL="https://www.vmware.com/go/getfusion"
   appIcon="electron"
   plistVersionString="CFBundleShortVersionString"
@@ -1841,6 +1982,9 @@ function determineInstaller() {
   elif [[ "${installerType}" == "zip" ]]; then
     echo "`date` - Installer type: zip"
     installLatestFromZip
+  elif [[ "${installerType}" == "Figma.zip" ]]; then
+    echo "`date` - Installer type: Figma.zip"
+    installLatestFromFigmaZip
   elif [[ "${installerType}" == "app" ]]; then
     echo "`date` - Installer type: app"
     installLatestFromApp
@@ -1853,6 +1997,8 @@ function determineInstaller() {
     abortMission
   fi
 }
+
+#------------------------------------------------------------------------------#
 
 function installLatestFromDmg() {
   echo "`date` - Installing from dmg installer..."
@@ -1891,6 +2037,8 @@ function installLatestFromDmg() {
   fi
 }
 
+#------------------------------------------------------------------------------#
+
 function installLatestFromPkg() {
   echo "`date` - Installing from pkg installer..."
   installAttemptCounter=0
@@ -1925,6 +2073,8 @@ function installLatestFromPkg() {
     exit 1
   fi
 }
+
+#------------------------------------------------------------------------------#
 
 function installLatestFromZip() {
   echo "`date` - Installing from zip file..."
@@ -1965,6 +2115,98 @@ function installLatestFromZip() {
   fi
 }
 
+#------------------------------------------------------------------------------#
+
+function installLatestFromFigmaZip() {
+  echo "`date` - Installing from zip file..."
+  installAttemptCounter=0
+
+  until [[ -a "${appFullHomeDirectory}" ]]; do
+    ((installAttemptCounter++))
+    echo "`date` - Changing directory to /private/tmp..."
+    cd /private/tmp
+    echo "`date` - Unzipping ${installerFullDirectory}..."
+    unzip -qq "${installerFullDirectory}"
+    echo "`date` - Moving ${appName}.app to ${appHomeDirectory}..."
+    mv "${appName}.app" "${appHomeDirectory}"
+    sleep 1
+    if [[ ! -a "${appFullHomeDirectory}" && "${installAttemptCounter}" == "1" ]]; then
+      echo "`date` - First attempt to install app failed."
+    elif [[ ! -a "${appFullHomeDirectory}" && "${installAttemptCounter}" == "2" ]]; then
+      echo "`date` - Second attempt to install app failed."
+    elif [[ ! -a "${appFullHomeDirectory}" && "${installAttemptCounter}" == "3" ]]; then
+      echo "`date` - Third attempt to install app failed."
+      break
+    else
+      break
+    fi
+    sleep 1
+  done
+
+  if [[ -a "${appFullHomeDirectory}" ]]; then
+    echo "`date` - ${appName}.app was successfully moved to ${appHomeDirectory}."
+
+    echo "`date` - Modifying app owner permission to user: ${userName}"
+    chown -R ${userName} "${appFullHomeDirectory}"
+
+    echo "`date` - Opening the ${appName} installer app..."
+    open -a "${appFullHomeDirectory}"
+
+    appProcessName=$(defaults read "${plistDirectory}" CFBundleExecutable)
+    appPID=$(pgrep "${appProcessName}")
+    appInstallerPID=$(echo ${appPID})
+    echo "`date` - App installer PID: ${appInstallerPID}"
+
+    openAttemptCounter=0
+    until [[ "${appPID}" != "${appInstallerPID}" ]]; do
+      ((openAttemptCounter++))
+      echo "`date` - UNTIL LOOP: openAttemptCounter: ${openAttemptCounter}"
+      sleep 5
+      # Pulls the executable name from the app's plist.
+      appProcessName=$(defaults read "${plistDirectory}" CFBundleExecutable)
+      echo "`date` - UNTIL LOOP: appProcessName: ${appInstallerPID}"
+      # Pulls the process ID(s) if the app is running.
+      appPID=$(pgrep "${appProcessName}")
+      echo "`date` - UNTIL LOOP: appPID: ${appInstallerPID}"
+
+      if [[ "${appPID}" == "${appInstallerPID}" && "${openAttemptCounter}" == "60" ]]; then
+        echo "`date` - ${appName} was unable to install."
+        break
+      fi
+      sleep 1
+    done
+
+  elif [[ ! -a "${appFullHomeDirectory}" ]]; then
+    echo "`date` - ${appName}.app failed to move to ${appHomeDirectory}..."
+    abortMission
+  else
+    echo "`date` - Error at function: installLatest"
+    echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
+    exit 1
+  fi
+
+  if [[ "${appPID}" != "${appInstallerPID}" ]]; then
+    echo "`date` - Attempting to quit ${appName}..."
+    appProcessName=$(defaults read "${plistDirectory}" CFBundleExecutable)
+    killall "${appProcessName}"
+    sleep 1
+    confirmAppQuit=$(pgrep "${appProcessName}")
+    if [[ "${confirmAppQuit}" == "" ]]; then
+      echo "`date` - Did ${appName} quit successfully: Yes"
+    else
+      echo "`date` - Did ${appName} quit successfully: No"
+      echo "`date` - Error at function: installLatestFromZipIns"
+      echo "`date` - Error details: ${appName} was unable to quit."
+      echo "`date` - Abort mission..."
+      exit 1
+    fi
+  fi
+
+  checkLatestInstall
+}
+
+#------------------------------------------------------------------------------#
+
 function installLatestFromApp() {
   echo "`date` - Installing updated version..."
   installAttemptCounter=0
@@ -1999,6 +2241,8 @@ function installLatestFromApp() {
     exit 1
   fi
 }
+
+#------------------------------------------------------------------------------#
 
 function installLatestFromPkgDmg() {
   echo "`date` - Installing from pkg within dmg installer..."
@@ -2080,7 +2324,7 @@ function checkTeamIdentifier() {
   installedTeamIdentifier=$(codesign -dv ${appFullHomeDirectory} 2>&1 | grep TeamIdentifier | cut -c 16-)
   if [[ "${officialTeamIdentifier}" == "${installedTeamIdentifier}" ]]; then
     echo "`date` - Does team identifier match: Yes"
-    modifyApp
+    additionalInstallers
   else
     echo "`date` - Does team identifier match: No"
     echo "`date` - This version of the app may not be from the official developer."
@@ -2117,6 +2361,19 @@ function debugEnd() {
     echo "`date` - * * * * * * * * * * End of DEBUG * * * * * * * * * *"
   else
     :
+  fi
+}
+
+#------------------------------------------------------------------------------#
+
+function additionalInstallers() {
+  if [[ "${appName}" == "Wireshark" ]]; then
+    echo "`date` - Installing additional packages for Wireshark..."
+    echo "`date` - Attempting to install Install ChmodBPF.pkg..."
+    installer -pkg "/Applications/Wireshark.app/Contents/Resources/Extras/Install ChmodBPF.pkg" -target /
+    modifyApp
+  else
+    modifyApp
   fi
 }
 
