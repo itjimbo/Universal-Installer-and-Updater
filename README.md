@@ -164,11 +164,14 @@ Example:
 You can add new apps to the script with minimal effort. 
 
 # Versions
-**Version 2022.05.18**
+**Version 2022.05.20**
+- Added list of apps at the top of the script for easy searching
+- Updated latestVersion variables for consistency
 - Added Beyond Compare, CraftManager, Figma, and Python 3 apps to script
 - Figma app uses custom installer
    - 'Figma' and 'installLatestFromFigmaZip' functions were created
    - 'installLatestFromFigmaZip' function was added to the 'determineInstaller' function
+- Added additionalInstallers function to install additional packages for Wireshark (and other future apps)
 - Added commented line dividers between functions
 
 **Version 2022.05.05**
