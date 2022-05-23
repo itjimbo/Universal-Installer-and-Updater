@@ -98,7 +98,7 @@ Some bullet points about this script:
 
 
 ### <ins>Adding an Install Policy to Jamf</ins>
-In the steps below, Microsoft Word will be used as an example. Only the necessary options will be covered. This is an install policy, not an update policy. This will only install the app on machines listed in the scope.
+In the steps below, Mozilla Firefox will be used as an example. This is an install policy, not an update policy. The update policy is covered in the **Adding an Update Policy to Jamf** section below.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
