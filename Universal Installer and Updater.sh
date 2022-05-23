@@ -3,7 +3,7 @@
 ################################################################################
 #                                                                              #
 # Title:    Universal Installer and Updater                                    #
-# Version:  2022.05.20                                                         #
+# Version:  2022.05.23                                                         #
 # Author:   github.com/itjimbo                                                 #
 #                                                                              #
 ################################################################################
@@ -17,7 +17,7 @@
 # Citrix Workspace
 # Craft Manager
 # Docker
-# Eclipse IDE For Enterprise Java And Web Developers
+# Eclipse - Eclipse IDE For Enterprise Java And Web Developers
 # Figma
 # Google Chrome
 # JetBrains AppCode
@@ -40,6 +40,7 @@
 # Python 3
 # Sketch
 # Slack
+# Sourcetree
 # Wireshark
 # VMwareFusion
 
@@ -194,8 +195,7 @@ function CraftManager() {
 
 #------------------------------------------------------------------------------#
 
-# DO NOT USE. STILL IN TESTING.
-# Docker will not quit will killall command. Implement JamfHelper that will prompt user to quit the app.
+# Docker uses a custom function (quitAppDocker) to quit the app.
 function Docker() {
   appName="Docker"
   appHomeDirectory="/Applications"
@@ -784,6 +784,31 @@ function Slack() {
 
 #------------------------------------------------------------------------------#
 
+function Sourcetree() {
+  appName="Sourcetree"
+  appHomeDirectory="/Applications"
+  installerType="zip"
+  latestVersion=$(curl -fs curl -fs "https://www.sourcetreeapp.com" | tr ' ' '\n' | grep "macURL" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
+  latestBuildNumber=$(curl -fs curl -fs "https://www.sourcetreeapp.com" | tr ' ' '\n' | grep "macURL" | grep -Eo '[0-9]+[.0-9]*' | tail -1 | tr -d '.' | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://product-downloads.atlassian.com/software/sourcetree/ga/Sourcetree_${latestVersion}_${latestBuildNumber}.zip"
+  appIcon="sourcetree"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="UPXU4CQZ5P"
+  volumeName=""
+  pkgName=""
+  checksumAvailable="FALSE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$()
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
+
 function Wireshark() {
   appName="Wireshark"
   appHomeDirectory="/Applications"
@@ -909,6 +934,19 @@ function errorPrompt() {
   -description "${appName} failed to update. Your IT administrator has been notified. The previous version of ${appName} has been restored." \
   -lockHUD \
   -button1 "OK"`
+}
+
+#------------------------------------------------------------------------------#
+
+function quitAppPrompt() {
+  jamfHelperQuitAppPrompt=`"/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper" \
+  -windowType utility \
+  -icon "${appIconFullDirectory}" \
+  -title "${appName} Update" \
+  -description "${appName} could not quit gracefully. Please save your work and manually quit ${appName}. ${NL}${NL}Once you have quit ${appName}, click Retry to retry the update, or Cancel to cancel the update." \
+  -button1 "Retry" \
+  -button2 "Cancel" \
+  -cancelButton "2"`
 }
 
 #------------------------------------------------------------------------------#
@@ -1409,7 +1447,7 @@ function checkAppState() {
   if [[ "${appPID}" == "" ]]; then
     echo "`date` - Is ${appName} running: No"
     appState="OFF"
-    quitApp
+    installerVariables
   else
     echo "`date` - Is ${appName} running: Yes"
     appState="ON"
@@ -1429,7 +1467,7 @@ function checkPromptSettings() {
 
     if [[ "${jamfHelperUpdatePrompt}" == "0" ]]; then
       echo "`date` - Did user choose to update: Yes"
-      quitApp
+      quitAppPreCheck
     elif [[ "${jamfHelperUpdatePrompt}" == "2" ]]; then
       echo "`date` - Did user choose to update: No"
       deferralVariables
@@ -1441,7 +1479,7 @@ function checkPromptSettings() {
     fi
 
   elif [[ "${prompts}" == "FALSE" ]]; then
-    quitApp
+    quitAppPreCheck
   fi
 }
 
@@ -1538,7 +1576,7 @@ function checkDeferral() {
     echo "`date` - Prompt type: finalDeferralPrompt"
 
     finalDeferralPrompt
-    quitApp
+    quitAppPreCheck
 
   else
     echo "`date` - Has deferral limit been reached: No"
@@ -1548,6 +1586,46 @@ function checkDeferral() {
     echo "`date` - Prompt user regarding deferral limit: Yes"
     echo "`date` - Prompt type: deferralPrompt"
     deferralPrompt
+    debugEnd
+    exit 1
+  fi
+}
+
+#------------------------------------------------------------------------------#
+
+function quitAppPreCheck() {
+  if [[ "${appState}" == "ON" && "${appName}" == "Docker" ]]; then
+    quitAppDocker
+  else
+    quitApp
+  fi
+}
+
+#------------------------------------------------------------------------------#
+
+function quitAppDocker() {
+  echo "`date` - ${appName} must be quit manually by the user."
+  echo "`date` - Prompting user to manually quit ${appName}..."
+  echo "`date` - Prompt type: quitAppPrompt"
+  quitAppPrompt
+
+  if [[ "${jamfHelperQuitAppPrompt}" == "0" ]]; then
+    sleep 5
+    confirmAppQuit=$(pgrep "${appProcessName}")
+
+    if [[ "${confirmAppQuit}" == "" ]]; then
+      echo "`date` - Did ${appName} quit successfully: Yes"
+      displayUpdatingWindow
+    else
+      echo "`date` - Did ${appName} quit successfully: No"
+      echo "`date` - Prompting user to quit ${appName} again..."
+      quitAppDocker
+    fi
+
+  elif [[ "${jamfHelperQuitAppPrompt}" == "2" ]]; then
+    echo "`date` - Error at function: quitAppDocker"
+    echo "`date` - Error details: User chose to cancel the update."
+    echo "`date` - Abort mission..."
     debugEnd
     exit 1
   fi
@@ -1568,13 +1646,20 @@ function quitApp() {
       displayUpdatingWindow
     else
       echo "`date` - Did ${appName} quit successfully: No"
-      echo "`date` - Error at function: quitApp"
-      echo "`date` - Error details: ${appName} was unable to quit."
-      echo "`date` - Abort mission..."
-      debugEnd
-      exit 1
-    fi
+      echo "`date` - Prompting user to manually quit ${appName}..."
+      echo "`date` - Prompt type: quitAppPrompt"
+      quitAppPrompt
 
+      if [[ "${jamfHelperQuitAppPrompt}" == "0" ]]; then
+        quitApp
+      elif [[ "${jamfHelperQuitAppPrompt}" == "2" ]]; then
+        echo "`date` - Error at function: quitApp"
+        echo "`date` - Error details: ${appName} was not quit and the user chose to cancel the update."
+        echo "`date` - Abort mission..."
+        debugEnd
+        exit 1
+      fi
+    fi
   else
     installerVariables
   fi
