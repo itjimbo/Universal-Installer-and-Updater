@@ -3,19 +3,19 @@ Before you begin reading, don't forget you can use GitHub's built in table of co
 # Universal-Installer-and-Updater
 
 ### <ins>Summary</ins>
-This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters for the script when creating a Policy, and the script will take care of the rest. Full instructions below on how to configure and add the script to Jamf, creating install and update Policies, and other tips for implenting this workflow in your Jamf environment.
+This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters on the script payload when creating a policy, and the script will take care of the rest. Instructions below on how to setup a functioning workflow of the script in Jamf, creating install and update policies, and other tips for implenting this workflow in your Jamf environment.
 
 Some bullet points about this script:
-- You can create two seperate policies with different settings: one for installing an app, and one for updating an app.
-- The script is capable of installing apps with the following installers: .dmg, .pkg, .pkg within .dmg, .zip, and .app (apps without an installer). 
-- Adding an app to the script is fairly simple. See the **Adding Apps to the Script** subsection under the **Instructions** section below.
+- You can create at least two seperate policies with different settings: one for installing an app, and one for updating an app.
+- The script is capable of installing apps with the following installers: .dmg, .pkg, .pkg within .dmg, .zip, and .app.
+- Adding an app to the script is fairly simple. See the **Adding Apps to the Script** subsection below.
 - This script does not come with a waranty or guarantee of any kind; use at your own risk. It works great in my environment of ~300 Mac endpoints.
 - If changes are made on the app developer's website, it's possible those changes could break the script. These issues are usually caught fairly quickly and typically resolved within hours. The script will then be updated here on GitHub as well.
 
 ### <ins>Workflow Outline</ins>
-1. Add the script to Jamf.
-2. Create individual Policies for each app you would like to install/update.
-3. Set the parameters under the Script payload within each Policy.
+1. Adding the script to Jamf.
+2. Creating individual Policies for each app you would like to install/update.
+3. Setting the parameters under the Script payload within each Policy.
 4. Add software titles of your choice to Patch Management to monitor updates.
 
 # Instructions
