@@ -14,9 +14,9 @@ Some bullet points about this script:
 
 ### <ins>Instructions Outline</ins>
 1. Adding the script to Jamf.
-2. Creating individual Policies for each app you would like to install/update.
+2. Creating individual Policies for each app you would like to install/update:
    - Creating a policy to install an app via Self Service
-   - Creatong a policy to install an app to endpoints automatically
+   - Creating a policy to install an app to endpoints automatically
    - Creating a policy to update an app via Self Service
    - Creating a policy to update an app automatically for endpoints
 3. Setting the parameters under the Script payload within each Policy.
@@ -102,7 +102,7 @@ Some bullet points about this script:
 
 
 ### <ins>Adding an Install Policy to Self Service</ins>
-In the steps below, Mozilla Firefox will be used as an example. This is an install policy that makes the app available to download via Self Service. To install an app to Macs automatically, skip to the **Adding an Install Policy for Automatic Installse** section below. Creating update policies can also be found in the sections below.
+In the steps below, Mozilla Firefox will be used as an example. This is an install policy that allows the app to be downloaded via Self Service. To install an app to endpoints automatically, skip to the **Adding an Install Policy for Automatic Installs** section below.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
