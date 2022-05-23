@@ -137,7 +137,9 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
       
       [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
    
-5. Click on the **Files and Processes** payload, then click **Configure**. For the **Execute Command** option, copy/paste: `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
+5. Click on the **Files and Processes** payload, then click **Configure**. For the **Execute Command** option, copy/paste: 
+
+   `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
    
    [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
 6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
