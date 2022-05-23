@@ -22,11 +22,11 @@ Some bullet points about this script:
 ### <ins>Adding the Script to Jamf</ins>
 1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts** > **New**
 2. On the **General** tab for **Display Name**, input: **`Universal Installer and Updater`**. 
-   - [Jamf Screenshot](URL)
+   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20General.png)
 3. On the **Script** tab, copy/paste the contents of the **[Universal Installer and Updater.sh](https://github.com/itjimbo/Universal-Installer-and-Updater/blob/main/Universal%20Installer%20and%20Updater.sh)** file from this repository.
-   - [Jamf Screenshot](URL)
+   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Script.png)
 4. On the **Options** tab, choose **Before** for the **Priority** dropdown, and copy/paste the following **Parameter Labels**:
-   - [Jamf Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20Parameter%20Labels.png)
+   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Options.png)
 
     **Parameter 4**:
     
