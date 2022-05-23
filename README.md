@@ -15,6 +15,10 @@ Some bullet points about this script:
 ### <ins>Instructions Outline</ins>
 1. Adding the script to Jamf.
 2. Creating individual Policies for each app you would like to install/update.
+   - Creating a policy to install an app via Self Service
+   - Creatong a policy to install an app to endpoints automatically
+   - Creating a policy to update an app via Self Service
+   - Creating a policy to update an app automatically for endpoints
 3. Setting the parameters under the Script payload within each Policy.
 4. Add software titles of your choice to Patch Management to monitor updates.
 
@@ -97,19 +101,19 @@ Some bullet points about this script:
 - This parameter is not currently in use.
 
 
-### <ins>Adding an Install Policy to Jamf</ins>
-In the steps below, Mozilla Firefox will be used as an example. This is an install policy, not an update policy. The update policy is covered in the **Adding an Update Policy to Jamf** section below.
+### <ins>Adding an Install Policy to Self Service</ins>
+In the steps below, Mozilla Firefox will be used as an example. This is an install policy that makes the app available to download via Self Service. To install an app to Macs automatically, skip to the **Adding an Install Policy for Automatic Installse** section below. Creating update policies can also be found in the sections below.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
       
-      a. **Display Name**: `Microsoft Word - Install`
+      a. **Display Name**: `Mozilla Firefox - Install`
       
       b. **Enabled**: Checked
       
-      c. **Trigger**: Recurring Check-in (if you also need the policy to run after enrollment, select Enrollment Complete)
+      c. **Trigger**: _None_
       
-      d. **Execution Frequency**: Once Per Computer
+      d. **Execution Frequency**: Ongoing
       
       [_Jamf Screenshot_](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20General.png)
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
