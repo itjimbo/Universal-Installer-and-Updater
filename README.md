@@ -2,7 +2,7 @@ Before you begin reading, don't forget you can use GitHub's built in table of co
 
 # Universal-Installer-and-Updater
 
-### <ins>Summary</ins>
+### <ins>About</ins>
 This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters on the script payload when creating a policy, and the script will take care of the rest. Instructions below on how to setup a functioning workflow of the script in Jamf, creating install and update policies, and other tips for implenting this workflow in your Jamf environment.
 
 Some bullet points about this script:
@@ -12,7 +12,7 @@ Some bullet points about this script:
 - This script does not come with a waranty or guarantee of any kind; use at your own risk. It works great in my environment of ~300 Mac endpoints.
 - If changes are made on the app developer's website, it's possible those changes could break the script. These issues are usually caught fairly quickly and typically resolved within hours. The script will then be updated here on GitHub as well.
 
-### <ins>Workflow Outline</ins>
+### <ins>Instructions Outline</ins>
 1. Adding the script to Jamf.
 2. Creating individual Policies for each app you would like to install/update.
 3. Setting the parameters under the Script payload within each Policy.
@@ -21,7 +21,8 @@ Some bullet points about this script:
 # Instructions
 ### <ins>Adding the Script to Jamf</ins>
 1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts** > **New**
-2. On the **General** tab for **Display Name**, input: **`Universal Installer and Updater`**. 
+2. On the **General** tab for **Display Name**, input: **`Universal Installer and Updater`**.
+   Note: The screenshot shows "Universal Installer and Updater (Production)" as the script name. I have the same script created as a test script as well for when I make changes to the script and want to test things out before deplying it to production. You may want to do this as well, but it's completely optional.
    - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20General.png)
 3. On the **Script** tab, copy/paste the contents of the **[Universal Installer and Updater.sh](https://github.com/itjimbo/Universal-Installer-and-Updater/blob/main/Universal%20Installer%20and%20Updater.sh)** file from this repository.
    - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Script.png)
