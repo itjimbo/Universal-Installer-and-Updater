@@ -164,6 +164,13 @@ Example:
 You can add new apps to the script with minimal effort. 
 
 # Versions
+**Version 2022.05.23**
+- Added Sourcetree app
+- Added a JamfHelper window function (quitAppPrompt) to prompt the user to manaually quit an app
+   - Primarily created for Docker, but works for all apps
+   - Created a custom function (quitAppPreCheck) to determine if the app that must quit is Docker, or some other app
+   - Created custom function (quitAppDocker) to quit Docker that utilizes the quitAppPrompt function
+
 **Version 2022.05.20**
 - Added list of apps at the top of the script for easy searching
 - Updated latestVersion variables for consistency
