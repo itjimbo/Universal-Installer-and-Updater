@@ -161,6 +161,18 @@ Example:
 ### <ins>Adding Apps to the Script</ins>
 You can add new apps to the script with minimal effort. 
 
+### <ins>Log Samples</ins>
+Logs are available in two places. The script keeps a log of everything it does locally on an endpoint, and it also reports the last 100 lines of the log to Jamf's policy logs. 
+
+Here is a sample of a log from Jamf after an update with of Mozilla Firefox. It's not the prettiest since Jamf displays a narrow window for logs, but it's still legibile. 
+
+[Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Jamf%20%3E%20Mozilla%20Firefox%20%3E%20Logs.png)
+
+Here is a sample of the same log from the local machine. You can see it's much easier to read than the version in Jamf.
+
+[Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Library%20%3E%20Logs%20%3E%20Mozilla%20Firefox.png)
+
+
 # Versions
 **Version 2022.05.23**
 - Added Sourcetree app
