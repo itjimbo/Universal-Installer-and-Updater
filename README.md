@@ -151,6 +151,7 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
 8. Click **Save**.
 
 ### <ins>Creating an Install Policy to Automatically Distribute an App</ins>
+This will create a policy which will deploy an app automatically to target computers.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
@@ -190,16 +191,14 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
    
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
    
-   Note: Update the 'jamf_Firefox_iu.log' portion of the command with the app you are working with. For example, if you are creating a policy for Google Chrome, then the log file name would be 'jamf_GoogleChrome_iu.log', as shown below.
+   Note: The log file name is always the name of the app as it appears in the Applications folder, but without the spaces. Update the 'jamf_Firefox_iu.log' portion of the command with the app you are working with. For example, if you are creating a policy for Google Chrome, then the log file name would be 'jamf_GoogleChrome_iu.log', and the command would appear as shown below.
 
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_GoogleChrome_iu.log | tail -n 100`
    
-   Note 2: The log file name is always the name of the app as it appears in the Applications folder, but without the spaces. 
-   
    [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
    
-6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
-7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
+6. Click on the **Scope** tab and select which computers or users the policy should be deploy to. It's a good idea to use test computers first to be sure the policy/script works.
+7. Click on the **Self Service** tab and be sure **Make the policy available in Self Service** option is **unchecked**.
    
    [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
    
