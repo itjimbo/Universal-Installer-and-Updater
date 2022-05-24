@@ -1,7 +1,6 @@
-Before you begin reading, don't forget you can use GitHub's built in table of contents to jump to a section:
+Note: You can use GitHub's built in table of contents to jump to a specific section.
 
 # Universal-Installer-and-Updater
-
 
 ### <ins>About</ins>
 This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters on the script payload when creating a policy, and the script will take care of the rest. Instructions below on how to setup a functioning workflow of the script in Jamf, creating install and update policies, and other tips for implenting this workflow in your Jamf environment.
@@ -13,7 +12,6 @@ Some bullet points about this script:
 - This script does not come with a waranty or guarantee of any kind; use at your own risk. It works great in my environment of ~300 Mac endpoints.
 - If changes are made on the app developer's website, it's possible those changes could break the script. These issues are usually caught fairly quickly and typically resolved within hours. The script will then be updated here on GitHub as well.
 
-
 ### <ins>Instructions Outline</ins>
 1. Adding the script to Jamf.
 2. Creating individual Policies for each app you would like to install/update:
@@ -23,7 +21,6 @@ Some bullet points about this script:
    - Creating a policy to update an app automatically for endpoints
 3. Setting the parameters under the Script payload within each Policy.
 4. Add software titles of your choice to Patch Management to monitor updates.
-
 
 # Instructions
 ### <ins>Adding the Script to Jamf</ins>
@@ -104,7 +101,7 @@ Some bullet points about this script:
 - This parameter is not currently in use.
 
 
-### <ins>Adding an Install Policy to Self Service</ins>
+### <ins>Creating an Install Policy for Self Service</ins>
 In the steps below, Mozilla Firefox will be used as an example. This is an install policy that allows the app to be downloaded via Self Service. To install an app to endpoints automatically, skip to the **Adding an Install Policy for Automatic Installs** section below.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
@@ -119,6 +116,7 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
       d. **Execution Frequency**: Ongoing
       
       [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20General.png)
+      
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
 
@@ -126,15 +124,15 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
    
       b. **APPLICATION NAME**: MicrosoftWord
    
-      c. **REQUIRED DISK SPACE**: 0 (or configure to your liking based on the parameter's details)
+      c. **REQUIRED DISK SPACE**: 0 _(or configure to your liking based on the parameter's details)_
    
-      d. **DEFERRAL DAYS**: 7 (or configure to your liking based on the parameter's details)
+      d. **DEFERRAL DAYS**: 7 _(or configure to your liking based on the parameter's details)_
    
       e. **PROMPTS**: TRUE
    
       f: **UPDATING WINDOW**: TRUE 
    
-      g. **LATEST VERSION**: NA (since the latest version is obtained in the script itself)
+      g. **LATEST VERSION**: NA _(since the latest version is obtained in the script itself)_
    
       h. **Paramter 11**: _blank_
       
@@ -145,6 +143,61 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
    
    [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
+6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
+7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
+   
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
+   
+8. Click **Save**.
+
+### <ins>Creating an Install Policy to Automatically Distribute an App</ins>
+
+1. In Jamf, navigate to **Computers** > **Policies** > **New**
+2. On the **General** tab, fill in the following:
+      
+      a. **Display Name**: `Mozilla Firefox - Automatically Install`
+      
+      b. **Enabled**: Checked
+      
+      c. **Trigger**: Recurring Check-in
+      
+      d. **Execution Frequency**: Once per computer
+      
+      [Screenshot]()
+      
+3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
+4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
+
+      a. **DEBUG MODE**: FALSE
+   
+      b. **APPLICATION NAME**: MozillaFirefox _(or any other app within the script you would like to install)_
+   
+      c. **REQUIRED DISK SPACE**: 0 _(or configure to your liking based on the parameter's details)_
+   
+      d. **DEFERRAL DAYS**: 7 _(or configure to your liking based on the parameter's details)_
+   
+      e. **PROMPTS**: TRUE
+   
+      f: **UPDATING WINDOW**: TRUE 
+   
+      g. **LATEST VERSION**: NA _(NA, since the latest version is obtained in the script itself)_
+   
+      h. **Paramter 11**: _blank_
+      
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
+   
+5. Click on the **Files and Processes** payload, then click **Configure**. For the **Execute Command** option, copy/paste the command below.
+   
+   `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
+   
+   Note: Update the 'jamf_Firefox_iu.log' portion of the command with the app you are working with. For example, if you are creating a policy for Google Chrome, then the log file name would be 'jamf_GoogleChrome_iu.log', as shown below.
+
+   `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_GoogleChrome_iu.log | tail -n 100`
+   
+   Note 2: The log file name is always the name of the app as it appears in the Applications folder, but without the spaces. 
+   
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
+   
 6. Click on the **Scope** tab and choose which machines the policy should deploy to. It's a good idea to use test machines first to make sure the policy/script works.
 7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
    
