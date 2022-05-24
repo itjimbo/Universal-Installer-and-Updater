@@ -320,13 +320,21 @@ This will create a policy which will automatically update an app on target compu
 # Instructions (Duplicating Policies)
 If you would like to create the same policies for other apps, I recommend duplicating the existing policies and simply updating a few of the options to match the newly configured app.
 
-## >Duplicating Policies for Other Apps
+## Duplicating Policies for Other Apps
 A breakdown of each type of policy is listed below, with the changes each policy would need for a newly configured app.
 
-### Creating an Install Policy for Self Service
-### Creating an Install Policy to Automatically Distribute an App
-### Creating an Update Policy for Self Service
-### Creating an Update Policy to Automatically Update an App
+### <ins>Creating an Install Policy for Self Service</ins>
+ - Update the...
+ - Update the...
+### <ins>Creating an Install Policy to Automatically Distribute an App</ins>
+ - Update the...
+ - Update the...
+### <ins>Creating an Update Policy for Self Service</ins>
+ - Update the...
+ - Update the...
+### <ins>Creating an Update Policy to Automatically Update an App</ins>
+ - Update the...
+ - Update the...
 
 
 # Adding Apps to the Script
