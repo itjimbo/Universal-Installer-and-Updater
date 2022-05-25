@@ -1,7 +1,7 @@
-# UNIVERSAL INSTALLER AND UPDATER
+# Universal Installer and Updater
 Note: You can use GitHub's built in table of contents to jump to a specific section.
 
-## <ins>About</ins>
+## <ins>ABOUT</ins>
 This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters on the script payload when creating a policy, and the script will take care of the rest. Instructions below on how to setup a functioning workflow of the script in Jamf, creating install and update policies, and other tips for implenting this workflow in your Jamf environment.
 
 ### A Few Notes About this Script
@@ -21,7 +21,7 @@ This scipt is designed to work with Jamf. It has the ability to install or updat
 3. Setting the parameters under the Script payload within each Policy.
 4. Add software titles of your choice to Patch Management to monitor updates.
 
-## <ins>Instructions (Prerequisites)</ins>
+## <ins>INSTRUCTIONS (PREREQUISITES)</ins>
 The following instructions will guide you through adding the script to Jamf, as well as an explanation of the script's parameters.
 
 ### Adding the Script to Jamf
