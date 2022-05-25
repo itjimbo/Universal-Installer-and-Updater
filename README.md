@@ -1,4 +1,4 @@
-# Universal-Installer-and-Updater
+# <ins>Universal-Installer-and-Updater</ins>
 Note: You can use GitHub's built in table of contents to jump to a specific section.
 
 # <ins>About</ins>
