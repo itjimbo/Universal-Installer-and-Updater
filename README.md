@@ -1,17 +1,17 @@
 # Universal-Installer-and-Updater
 Note: You can use GitHub's built in table of contents to jump to a specific section.
 
-## About
+# <ins>About</ins>
 This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters on the script payload when creating a policy, and the script will take care of the rest. Instructions below on how to setup a functioning workflow of the script in Jamf, creating install and update policies, and other tips for implenting this workflow in your Jamf environment.
 
-### <ins>A Few Notes About this Script</ins>
+## A Few Notes About this Script
 - You can create at least two seperate policies with different settings: one for installing an app, and one for updating an app.
 - The script is capable of installing apps with the following installers: .dmg, .pkg, .pkg within .dmg, .zip, and .app.
 - Adding an app to the script is fairly simple. See the **Adding Apps to the Script** subsection below.
 - This script does not come with a waranty or guarantee of any kind; use at your own risk. It works great in my environment of ~300 Mac endpoints.
 - If changes are made on the app developer's website, it's possible those changes could break the script. These issues are usually caught fairly quickly and typically resolved within hours. The script will then be updated here on GitHub as well.
 
-### <ins>Instructions Outline</ins>
+## Instructions Outline
 1. Adding the script to Jamf.
 2. Creating individual Policies for each app you would like to install/update:
    - Creating a policy to install an app via Self Service
@@ -21,7 +21,7 @@ This scipt is designed to work with Jamf. It has the ability to install or updat
 3. Setting the parameters under the Script payload within each Policy.
 4. Add software titles of your choice to Patch Management to monitor updates.
 
-# Instructions (Prerequisites)
+# <ins>Instructions (Prerequisites)</ins>
 The following instructions will guide you through adding the script to Jamf, as well as an explanation of the script's parameters.
 
 ## Adding the Script to Jamf
@@ -101,8 +101,12 @@ The following instructions will guide you through adding the script to Jamf, as 
 
 - This parameter is not currently in use.
 
-# Instructions (Configuring Policies)
-The following instructions will guide you through configuring policies to install, automatically install, update, and automatically update apps.
+# <ins>Instructions (Configuring Policies)</ins>
+The following instructions contain 4 sections that will guide you with configuring the following: 
+- Adding an app to Self Service so users can install an app
+- Adding a "Check for Updates" chiclet in Self Service for the app so users can check for updates at any time
+- Adding an automatic installer that deploys the app automatically to target computers
+- Adding an automatic updater that updates an app automatically to target computers
 
 ## Creating an Install Policy for Self Service
 In the steps below, Mozilla Firefox will be used as an example. This is an install policy that allows the app to be downloaded via Self Service. To install an app to endpoints automatically, skip to the **Adding an Install Policy for Automatic Installs** section below.
@@ -317,7 +321,7 @@ This will create a policy which will automatically update an app on target compu
    
 8. Click **Save**.
 
-# Instructions (Duplicating Policies)
+# <ins>Instructions (Duplicating Policies)</ins>
 If you would like to create the same policies for other apps, I recommend duplicating the existing policies and simply updating a few of the options to match the newly configured app.
 
 ## Duplicating Policies for Other Apps
@@ -337,10 +341,10 @@ A breakdown of each type of policy is listed below, with the changes each policy
  - Update the...
 
 
-# Adding Apps to the Script
+# <ins>Adding Apps to the Script</ins>
 You can add new apps to the script with minimal effort. 
 
-# Log Samples
+# <ins>Log Samples</ins>
 Logs are available in two places. The script keeps a log of everything it does locally on an endpoint, and it also reports the last 100 lines of the log to Jamf's policy logs. 
 
 Here is a sample of a log from Jamf after an update with of Mozilla Firefox. It's not the prettiest since Jamf displays a narrow window for logs, but it's still legibile. 
