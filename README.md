@@ -27,12 +27,11 @@ The following instructions will guide you through adding the script to Jamf, as 
 ## Adding the Script to Jamf
 1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts** > **New**
 2. On the **General** tab for **Display Name**, input: **`Universal Installer and Updater`**.
-   - **Note**: The screenshot shows "Universal Installer and Updater (Production)" as the script name. I have the same script created as a test script as well so I can test changes to the script before deploying it to production. You may want to do this as well, but it's completely optional.
-   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20General.png)
+   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Universal%20Installer%20and%20Updater%20%3E%20General.png)
 3. On the **Script** tab, copy/paste the contents of the **[Universal Installer and Updater.sh](https://github.com/itjimbo/Universal-Installer-and-Updater/blob/main/Universal%20Installer%20and%20Updater.sh)** file from this repository.
-   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Script.png)
+   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Universal%20Installer%20and%20Updater%20%3E%20Script.png)
 4. On the **Options** tab, choose **Before** for the **Priority** dropdown, and copy/paste the following **Parameter Labels**:
-   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Options.png)
+   - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Universal%20Installer%20and%20Updater%20%3E%20Options.png)
 
     **Parameter 4**:
     
@@ -114,7 +113,7 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
       
-      a. **Display Name**: `Mozilla Firefox - Install`
+      a. **Display Name**: `Mozilla Firefox - Install (Self Service)`
       
       b. **Enabled**: Checked
       
@@ -122,7 +121,7 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
       
       d. **Execution Frequency**: Ongoing
       
-      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20General.png)
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Self%20Service)%20%3E%20General.png)
       
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
@@ -143,18 +142,18 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
    
       h. **Paramter 11**: _blank_
       
-      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Self%20Service)%20%3E%20Scripts.png)
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the **Execute Command** option, copy/paste: 
 
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Self%20Service)%20%3E%20Files%20and%20Processes.png)
    
 6. Click on the **Scope** tab and choose which computers or users the policy should be deployed to. It's a good idea to use test machines first to make sure the policy/script works.
 7. Click on the **Self Service** tab and configure the app for deployment via Self Service (optional).
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Self%20Service)%20%3E%20Self%20Service.png)
    
 8. Click **Save**.
 
@@ -164,7 +163,7 @@ This will create a policy which will deploy an app automatically to target compu
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
       
-      a. **Display Name**: `Mozilla Firefox - Automatically Install`
+      a. **Display Name**: `Mozilla Firefox - Install (Automatically)`
       
       b. **Enabled**: Checked
       
@@ -172,7 +171,7 @@ This will create a policy which will deploy an app automatically to target compu
       
       d. **Execution Frequency**: Once per computer
       
-      [Screenshot]()
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Automatically)%20%3E%20General.png)
       
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
@@ -193,7 +192,7 @@ This will create a policy which will deploy an app automatically to target compu
    
       h. **Paramter 11**: _blank_
       
-      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Automatically)%20%3E%20Scripts.png)
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the **Execute Command** option, copy/paste the command below.
    
@@ -203,12 +202,12 @@ This will create a policy which will deploy an app automatically to target compu
 
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_GoogleChrome_iu.log | tail -n 100`
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Automatically)%20%3E%20Files%20and%20Processes.png)
    
 6. Click on the **Scope** tab and select which computers or users the policy should be deployed to. It's a good idea to use test computers first to be sure the policy/script works.
 7. Click on the **Self Service** tab and be sure **Make the policy available in Self Service** option is **unchecked**.
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Install%20(Automatically)%20%3E%20Self%20Service.png)
    
 8. Click **Save**.
 
@@ -226,7 +225,7 @@ This policy will allow users to check an app for updates at any time in Self Ser
       
       d. **Execution Frequency**: Ongoing
       
-      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20General.png)
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Self%20Service)%20%3E%20General.png)
       
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
@@ -252,18 +251,18 @@ This policy will allow users to check an app for updates at any time in Self Ser
       h. **Paramter 11**: 
       _(leave blank)_
       
-      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Self%20Service)%20%3E%20Scripts.png)
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the **Execute Command** option, copy/paste: 
 
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_Firefox_iu.log | tail -n 100`
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Self%20Service)%20%3E%20Files%20and%20Processes.png)
    
 6. Click on the **Scope** tab and choose which computers, users, and or groups the policy should deployed to. It's a good idea to use test machines first to make sure the policy/script works.
 7. Click on the Self Service tab and be sure **Make the policy available in Self Service** option is **checked**. Configure the settings as shown in the screenshot below.
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Self%20Service)%20%3E%20Self%20Service.png)
    
 8. Click **Save**.
 
@@ -281,7 +280,7 @@ This will create a policy which will automatically update an app on target compu
       
       d. **Execution Frequency**: Once every day _(or once every week/month depending on how often you want the policy to check for udpates)_
       
-      [Screenshot](URL)
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Automatically)%20%3E%20General.png)
       
 3. Click on the **Scripts** payload, then click **Configure**. Search for the **Universal Installer and Updater** script, then click **Add**.
 4. Be sure the **Priority** option is set to **Before**. Then fill in the following parameters:
@@ -302,7 +301,7 @@ This will create a policy which will automatically update an app on target compu
    
       h. **Paramter 11**: _blank_
       
-      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Scripts.png)
+      [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Automatically)%20%3E%20Scripts.png)
    
 5. Click on the **Files and Processes** payload, then click **Configure**. For the **Execute Command** option, copy/paste the command below.
    
@@ -312,12 +311,12 @@ This will create a policy which will automatically update an app on target compu
 
    `echo "Displaying last 100 lines from log." && cat /Library/Logs/jamf_GoogleChrome_iu.log | tail -n 100`
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Files%20and%20Processes.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Automatically)%20%3E%20Files%20and%20Processes.png)
    
 6. Click on the **Scope** tab and select which computers or users the policy should be deployed to. It's a good idea to use test computers first to be sure the policy/script works.
 7. Click on the **Self Service** tab and be sure **Make the policy available in Self Service** option is **unchecked**.
    
-   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Self%20Service.png)
+   [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Policy%20%3E%20Mozilla%20Firefox%20-%20Update%20(Automatically)%20%3E%20Self%20Service.png)
    
 8. Click **Save**.
 
