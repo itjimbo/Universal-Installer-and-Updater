@@ -157,6 +157,9 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
    
 8. Click **Save**.
 
+View the screenshot below to see how the app should appear in Self Service.
+[Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Self%20Service%20%3E%20Software%20%3E%20Mozilla%20Firefox.png)
+
 ## Creating an Install Policy to Automatically Distribute an App
 This will create a policy which will deploy an app automatically to target computers.
 
@@ -217,7 +220,7 @@ This policy will allow users to check an app for updates at any time in Self Ser
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
       
-      a. **Display Name**: `Mozilla Firefox - Check for Updates`
+      a. **Display Name**: `Mozilla Firefox - Update (Self Service)`
       
       b. **Enabled**: Checked
       
@@ -266,13 +269,16 @@ This policy will allow users to check an app for updates at any time in Self Ser
    
 8. Click **Save**.
 
+View the screenshot below to see how the app should appear in Self Service.
+[Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Self%20Service%20%3E%20Updates%20%3E%20Mozilla%20Firefox.png)
+
 ## Creating an Update Policy to Automatically Update an App
 This will create a policy which will automatically update an app on target computers based on the execution frequency.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
 2. On the **General** tab, fill in the following:
       
-      a. **Display Name**: `Mozilla Firefox - Automatically Update`
+      a. **Display Name**: `Mozilla Firefox - Update (Automatically)`
       
       b. **Enabled**: Checked
       
