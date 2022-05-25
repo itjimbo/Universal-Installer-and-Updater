@@ -1,17 +1,17 @@
 # Universal Installer and Updater
 Note: You can use GitHub's built in table of contents to jump to a specific section.
 
-## <ins>ABOUT</ins>
+## ABOUT
 This scipt is designed to work with Jamf. It has the ability to install or update any app defined within the script. Simply input a few parameters on the script payload when creating a policy, and the script will take care of the rest. Instructions below on how to setup a functioning workflow of the script in Jamf, creating install and update policies, and other tips for implenting this workflow in your Jamf environment.
 
-### A Few Notes About this Script
+### <ins>A Few Notes About this Script</ins>
 - You can create at least two seperate policies with different settings: one for installing an app, and one for updating an app.
 - The script is capable of installing apps with the following installers: .dmg, .pkg, .pkg within .dmg, .zip, and .app.
 - Adding an app to the script is fairly simple. See the **Adding Apps to the Script** subsection below.
 - This script does not come with a waranty or guarantee of any kind; use at your own risk. It works great in my environment of ~300 Mac endpoints.
 - If changes are made on the app developer's website, it's possible those changes could break the script. These issues are usually caught fairly quickly and typically resolved within hours. The script will then be updated here on GitHub as well.
 
-### Instructions Outline
+### <ins>Instructions Outline</ins>
 1. Adding the script to Jamf.
 2. Creating individual Policies for each app you would like to install/update:
    - Creating a policy to install an app via Self Service
@@ -21,7 +21,7 @@ This scipt is designed to work with Jamf. It has the ability to install or updat
 3. Setting the parameters under the Script payload within each Policy.
 4. Add software titles of your choice to Patch Management to monitor updates.
 
-## <ins>INSTRUCTIONS (PREREQUISITES)</ins>
+## INSTRUCTIONS (PREREQUISITES)
 The following instructions will guide you through adding the script to Jamf, as well as an explanation of the script's parameters.
 
 ### Adding the Script to Jamf
