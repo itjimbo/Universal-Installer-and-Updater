@@ -24,7 +24,7 @@ This scipt is designed to work with Jamf. It has the ability to install or updat
 ## INSTRUCTIONS (PREREQUISITES)
 The following instructions will guide you through adding the script to Jamf, as well as an explanation of the script's parameters.
 
-### Adding the Script to Jamf
+### <ins>Adding the Script to Jamf</ins>
 1. In Jamf, navigate to **Settings** > **Computer Management** > **Scripts** > **New**
 2. On the **General** tab for **Display Name**, input: **`Universal Installer and Updater`**.
    - [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Script%20%3E%20Universal%20Installer%20and%20Updater%20%3E%20General.png)
@@ -67,7 +67,7 @@ The following instructions will guide you through adding the script to Jamf, as 
     
 6. Click **Save**.
 
-### Explanation of Paramaters
+### <ins>Explanation of Paramaters</ins>
 **Parameter 4 - DEBUG MODE**
 
 - Debug mode will run up to the point of downloading the latest installer. It will not install/update the app. This is useful for checking that everything in the script works as expected up to that point.
@@ -100,14 +100,14 @@ The following instructions will guide you through adding the script to Jamf, as 
 
 - This parameter is not currently in use.
 
-## <ins>Instructions (Configuring Policies)</ins>
+## INSTRUCTIONS (CONFIGURING POLICIES)
 The following instructions contain 4 sections that will guide you with configuring the following: 
 - Adding an app to Self Service so users can install an app
 - Adding a "Check for Updates" chiclet in Self Service for the app so users can check for updates at any time
 - Adding an automatic installer that deploys the app automatically to target computers
 - Adding an automatic updater that updates an app automatically to target computers
 
-### Creating an Install Policy for Self Service
+### <ins>Creating an Install Policy for Self Service</ins>
 In the steps below, Mozilla Firefox will be used as an example. This is an install policy that allows the app to be downloaded via Self Service. To install an app to endpoints automatically, skip to the **Adding an Install Policy for Automatic Installs** section below.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
@@ -160,7 +160,7 @@ In the steps below, Mozilla Firefox will be used as an example. This is an insta
 View the screenshot below to see how the app should appear in Self Service.
 [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Self%20Service%20%3E%20Software%20%3E%20Mozilla%20Firefox.png)
 
-### Creating an Install Policy to Automatically Distribute an App
+### <ins>Creating an Install Policy to Automatically Distribute an App</ins>
 This will create a policy which will deploy an app automatically to target computers.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
@@ -214,7 +214,7 @@ This will create a policy which will deploy an app automatically to target compu
    
 8. Click **Save**.
 
-### Creating an Update Policy for Self Service
+### <ins>Creating an Update Policy for Self Service</ins>
 This policy will allow users to check an app for updates at any time in Self Service.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
@@ -272,7 +272,7 @@ This policy will allow users to check an app for updates at any time in Self Ser
 View the screenshot below to see how the app should appear in Self Service.
 [Screenshot](https://raw.githubusercontent.com/itjimbo/Universal-Installer-and-Updater/main/Resources/Self%20Service%20%3E%20Updates%20%3E%20Mozilla%20Firefox.png)
 
-### Creating an Update Policy to Automatically Update an App
+### <ins>Creating an Update Policy to Automatically Update an App</ins>
 This will create a policy which will automatically update an app on target computers based on the execution frequency.
 
 1. In Jamf, navigate to **Computers** > **Policies** > **New**
@@ -326,30 +326,30 @@ This will create a policy which will automatically update an app on target compu
    
 8. Click **Save**.
 
-## <ins>Instructions (Duplicating Policies)</ins>
+## INSTRUCTIONS (DUPLICATING POLICIES)
 If you would like to create the same policies for other apps, I recommend duplicating the existing policies and simply updating a few of the options to match the newly configured app.
 
-### Duplicating Policies for Other Apps
+### <ins>Duplicating Policies for Other Apps</ins>
 A breakdown of each type of policy is listed below, with the changes each policy would need for a newly configured app.
 
-### <ins>Creating an Install Policy for Self Service</ins>
+#### <ins>Creating an Install Policy for Self Service</ins>
  - Update the...
  - Update the...
-### <ins>Creating an Install Policy to Automatically Distribute an App</ins>
+#### <ins>Creating an Install Policy to Automatically Distribute an App</ins>
  - Update the...
  - Update the...
-### <ins>Creating an Update Policy for Self Service</ins>
+#### <ins>Creating an Update Policy for Self Service</ins>
  - Update the...
  - Update the...
-### <ins>Creating an Update Policy to Automatically Update an App</ins>
+#### <ins>Creating an Update Policy to Automatically Update an App</ins>
  - Update the...
  - Update the...
 
 
-## <ins>Adding Apps to the Script</ins>
+## ADDING APPS TO THE SCRIPT
 You can add new apps to the script with minimal effort. 
 
-## <ins>Log Samples</ins>
+## LOG SAMPLES
 Logs are available in two places. The script keeps a log of everything it does locally on an endpoint, and it also reports the last 100 lines of the log to Jamf's policy logs. 
 
 Here is a sample of a log from Jamf after an update with of Mozilla Firefox. It's not the prettiest since Jamf displays a narrow window for logs, but it's still legibile. 
