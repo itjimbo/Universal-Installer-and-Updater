@@ -1,5 +1,10 @@
 # Versions
 
+**Version 2022.05.26**
+- Added OpenVPN Connect app
+- Added log separator lines for legibility
+- Replaced function name in echo commands with "${funcstack[1]}" to pull the name of a current function
+
 **Version 2022.05.23**
 - Added Sourcetree app
 - Added a JamfHelper window function (quitAppPrompt) to prompt the user to manaually quit an app
