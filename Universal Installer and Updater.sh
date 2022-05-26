@@ -3,18 +3,18 @@
 ################################################################################
 #                                                                              #
 # Title:    Universal Installer and Updater                                    #
-# Version:  2022.05.23                                                         #
+# Version:  2022.05.26                                                         #
 # Author:   github.com/itjimbo                                                 #
 #                                                                              #
 ################################################################################
 
 # List of applications this script can install/update:
 
-# Android Studio
+# Android Studio (DO NOT USE. STILL IN TESTING)
 # AppCleaner
 # Atom
 # Beyond Compare
-# Citrix Workspace
+# Citrix Workspace (DO NOT USE. STILL IN TESTING.)
 # Craft Manager
 # Docker
 # Eclipse - Eclipse IDE For Enterprise Java And Web Developers
@@ -35,6 +35,7 @@
 # Microsoft Word
 # Miro
 # Mozilla Firefox
+# OpenVPN Connect
 # pgAdmin
 # Postman
 # Python 3
@@ -42,7 +43,7 @@
 # Slack
 # Sourcetree
 # Wireshark
-# VMwareFusion
+# VMwareFusion (DO NOT USE. STILL IN TESTING.)
 
 ################################################################################
 #                         ADD APPS BETWEEN HERE...                             #
@@ -608,7 +609,7 @@ function MicrosoftWord() {
 
 #------------------------------------------------------------------------------#
 
-# Miro policy must use the LATEST VERSION parameter as it cannot currently be obtained online.
+# Miro policy must use the LATEST VERSION parameter in Jamf as it cannot currently be obtained online.
 function Miro() {
   appName="Miro"
   appHomeDirectory="/Applications"
@@ -653,6 +654,33 @@ function MozillaFirefox() {
   intelChecksumFromSite=$()
   intelChecksumFileDownload=""
   universalChecksumFromSite=$(curl "https://archive.mozilla.org/pub/firefox/releases/${latestVersion}/SHA256SUMS" | grep "mac/en-US/Firefox ${latestVersion}.dmg" | awk {'print $1'})
+  universalChecksumFileDownload=""
+}
+
+#------------------------------------------------------------------------------#
+
+function OpenVPNConnect() {
+  appName="OpenVPN Connect"
+  appHomeDirectory="/Applications/OpenVPN Connect"
+  installerType="pkg.dmg"
+  latestVersionNumber=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "Release notes for" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
+  latestVersionNumberUnderscrore=$(echo ${latestVersionNumber} | tr '.' '_')
+  latestBuildNumber=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "Release notes for" | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/[^ -~]//g')
+  latestVersion="${latestVersionNumber}"
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://swupdate.openvpn.net/downloads/connect/openvpn-connect-${latestVersionNumber}.${latestBuildNumber}_signed.dmg"
+  appIcon="electron"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="ACV7L3WCD8"
+  volumeName="OpenVPN Connect"
+  pkgName="OpenVPN_Connect_${latestVersionNumberUnderscrore}(${latestBuildNumber})_Installer_signed"
+  checksumAvailable="TRUE"
+  armChecksumFromSite=$()
+  armChecksumFileDownload=""
+  intelChecksumFromSite=$()
+  intelChecksumFileDownload=""
+  universalChecksumFromSite=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "sha256 signature" | head -1 | sed -e 's/.*: \(.*\)<.*/\1/' | sed 's/[^ -~]//g')
   universalChecksumFileDownload=""
 }
 
@@ -1005,8 +1033,10 @@ function jamfHelperVariables() {
   # Creates a new blank line for Jamf Helper.
   NL=$'\n'
 
+  # Path to the app's icon file.
   appIconFullDirectory="${appHomeDirectory}/${appName}.app/Contents/Resources/${appIcon}.icns"
 
+  # Continue to the next function...
   logProcess
 }
 
@@ -1047,7 +1077,7 @@ function debugStart() {
   elif [[ "${debugMode}" == "FALSE" ]]; then
     deviceInformation
   else
-    echo "`date` - Error at function: debugCheck"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Illegal value in parameter 4 (DEBUG MODE)."
     echo "`date` - Abort mission..."
     exit 1
@@ -1077,11 +1107,11 @@ function deviceInformation() {
   elif [[ "${processorArchitecture}" == "arm64" ]]; then
     processorType="Arm"
   elif [[ "${processorArchitecture}" == "" ]]; then
-    echo "`date` - Error at function: deviceInformation"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: processor is blank"
     exit 1
   else
-    echo "`date` - Error at function: deviceInformation"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Processor type cannot be determined."
     echo "`date` - processorArchitecture: ${processorArchitecture}"
     exit 1
@@ -1232,6 +1262,7 @@ function parameterCheck() {
 function appInstalledCheck() {
 
   echo ""
+  echo "`date` - Checking ${appName} on device..."
 
   # Defines the full path of the application.
   appFullHomeDirectory="${appHomeDirectory}/${appName}.app"
@@ -1428,7 +1459,7 @@ function appProcessVariables() {
   appPID=$(pgrep "${appProcessName}")
 
   if [[ "${appProcessName}" == "" ]]; then
-    echo "`date` - Error at function: appProcessVariables"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: appProcessName variable cannot be defined."
     echo "`date` - Abort mission..."
     exit 1
@@ -1623,7 +1654,7 @@ function quitAppDocker() {
     fi
 
   elif [[ "${jamfHelperQuitAppPrompt}" == "2" ]]; then
-    echo "`date` - Error at function: quitAppDocker"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: User chose to cancel the update."
     echo "`date` - Abort mission..."
     debugEnd
@@ -1653,7 +1684,7 @@ function quitApp() {
       if [[ "${jamfHelperQuitAppPrompt}" == "0" ]]; then
         quitApp
       elif [[ "${jamfHelperQuitAppPrompt}" == "2" ]]; then
-        echo "`date` - Error at function: quitApp"
+        echo "`date` - Error at function: ${funcstack[1]}"
         echo "`date` - Error details: ${appName} was not quit and the user chose to cancel the update."
         echo "`date` - Abort mission..."
         debugEnd
@@ -1674,7 +1705,7 @@ function displayUpdatingWindow() {
   elif [[ "${updatingWindow}" == "FALSE" ]]; then
     installerVariables
   else
-    echo "`date` - Error at function: displayUpdatingWindow"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: updatingWindow variable cannot be determined."
     echo "`date` - Abort mission..."
     debugEnd
@@ -1712,6 +1743,8 @@ function installerVariables() {
 #------------------------------------------------------------------------------#
 
 function cleanUpPreInstallCheck() {
+  echo ""
+  echo "`date` - Preparing to download ${appName}..."
   cleanUpPreInstall
   determineInstallerDownload
 }
@@ -1736,7 +1769,7 @@ function determineInstallerDownload() {
       installerDownloadType="intel"
       intelDownload
     else
-      echo "`date` - Error at function: determineInstallerDownload (Arm)"
+      echo "`date` - Error at function: ${funcstack[1]} (Arm)"
       echo "`date` - Error details: The armDownloadURL, universalDownloadURL, and intelDownloadURL variables are blank."
     fi
 
@@ -1750,13 +1783,13 @@ function determineInstallerDownload() {
       installerDownloadType="universal"
       universalDownload
     else
-      echo "`date` - Error at function: determineInstallerDownload (Intel)"
+      echo "`date` - Error at function: ${funcstack[1]} (Intel)"
       echo "`date` - Error details: The intelDownloadURL and universalDownloadURL variables are blank."
     fi
 
   else
     echo "`date` - Did the installer download successfully: No"
-    echo "`date` - Error at function: determineInstallerDownload"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: The processorType, universalDownloadURL, intelDownloadURL, or armDownloadURL variables could not be determined."
     echo "`date` - processorType: ${processorType}"
     echo "`date` - universalDownloadURL: ${universalDownloadURL}"
@@ -1798,7 +1831,7 @@ function armDownload() {
     checksumCheck
   else
     echo "`date` - Did the installer downloaded successfully: No"
-    echo "`date` - Error at function: armDownload"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: The latest installer was not able to be downloaded."
     echo "`date` - Abort mission..."
     debugEnd
@@ -1836,7 +1869,7 @@ function intelDownload() {
     checksumCheck
   else
     echo "`date` - Did the installer downloaded successfully: No"
-    echo "`date` - Error at function: intelDownload"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: The latest installer was not able to be downloaded."
     echo "`date` - Abort mission..."
     debugEnd
@@ -1874,7 +1907,7 @@ function universalDownload() {
     checksumCheck
   else
     echo "`date` - Did the installer downloaded successfully: No"
-    echo "`date` - Error at function: intelDownload"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: The latest installer was not able to be downloaded."
     echo "`date` - Abort mission..."
     debugEnd
@@ -1900,7 +1933,7 @@ function checksumCheck() {
     fi
 
   else
-    echo "`date` - Error at function: checksumCheck"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: checksumAvailable variable must either be TRUE or FALSE."
     echo "`date` - Abort mission..."
     exit 1
@@ -1949,7 +1982,7 @@ function latestChecksum() {
       echo "`date` - SHA-256 via app site: ${actualChecksum}"
       verifyChecksums
     else
-      echo "`date` - Error at function: latestChecksum"
+      echo "`date` - Error at function: ${funcstack[1]}"
       echo "`date` - Both armChecksumFromSite and armChecksumFileDownload variables are defined, or neither of them are defined."
       abortMission
     fi
@@ -1966,7 +1999,7 @@ function latestChecksum() {
       echo "`date` - SHA-256 via app site: ${actualChecksum}"
       verifyChecksums
     else
-      echo "`date` - Error at function: latestChecksum"
+      echo "`date` - Error at function: ${funcstack[1]}"
       echo "`date` - Both intelChecksumFromSite and intelChecksumFileDownload variables are defined, or neither of them are defined."
       abortMission
     fi
@@ -1983,12 +2016,12 @@ function latestChecksum() {
       echo "`date` - SHA-256 via app site: ${actualChecksum}"
       verifyChecksums
     else
-      echo "`date` - Error at function: latestChecksum"
+      echo "`date` - Error at function: ${funcstack[1]}"
       echo "`date` - Both universalChecksumFromSite and universalChecksumFileDownload variables are defined, or neither of them are defined."
       abortMission
     fi
   else
-    echo "`date` - Error at function: latestChecksum"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: installerDownloadType variable could not be defined."
     abortMission
   fi
@@ -2028,6 +2061,9 @@ function verifyChecksums() {
 # The existing app is temporarily moved to the /usr/local directory.
 # If the update fails, the existing app will be recovered from the /usr/local directory.
 function relocateApp() {
+  echo ""
+  echo "`date` - Preparing to install ${appName}..."
+
   if [[ "${appInstalled}" == "TRUE" ]]; then
     echo "`date` - Relocating existing version of ${appName} to: /usr/local"
 
@@ -2047,7 +2083,7 @@ function relocateApp() {
     determineInstaller
 
   else
-    echo "`date` - Error at function: relocateApp"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Cannot determine if app is installed or not."
     echo "`date` - Abort mission..."
     exit 1
@@ -2077,7 +2113,7 @@ function determineInstaller() {
     echo "`date` - Installer type: pkg.dmg"
     installLatestFromPkgDmg
   else
-    echo "`date` - Error at function: determineInstaller"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Could not determine installer type."
     abortMission
   fi
@@ -2116,7 +2152,7 @@ function installLatestFromDmg() {
     echo "`date` - ${appName}.app failed to copy to ${appHomeDirectory}..."
     abortMission
   else
-    echo "`date` - Error at function: installLatest"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
     exit 1
   fi
@@ -2153,7 +2189,7 @@ function installLatestFromPkg() {
     echo "`date` - ${appName}.app failed to install to ${appHomeDirectory}..."
     abortMission
   else
-    echo "`date` - Error at function: installLatest"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
     exit 1
   fi
@@ -2194,7 +2230,7 @@ function installLatestFromZip() {
     echo "`date` - ${appName}.app failed to move to ${appHomeDirectory}..."
     abortMission
   else
-    echo "`date` - Error at function: installLatest"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
     exit 1
   fi
@@ -2265,7 +2301,7 @@ function installLatestFromFigmaZip() {
     echo "`date` - ${appName}.app failed to move to ${appHomeDirectory}..."
     abortMission
   else
-    echo "`date` - Error at function: installLatest"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
     exit 1
   fi
@@ -2280,7 +2316,7 @@ function installLatestFromFigmaZip() {
       echo "`date` - Did ${appName} quit successfully: Yes"
     else
       echo "`date` - Did ${appName} quit successfully: No"
-      echo "`date` - Error at function: installLatestFromZipIns"
+      echo "`date` - Error at function: ${funcstack[1]}"
       echo "`date` - Error details: ${appName} was unable to quit."
       echo "`date` - Abort mission..."
       exit 1
@@ -2321,7 +2357,7 @@ function installLatestFromApp() {
     echo "`date` - ${appName}.app failed to install to ${appHomeDirectory}..."
     abortMission
   else
-    echo "`date` - Error at function: installLatest"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
     exit 1
   fi
@@ -2362,7 +2398,7 @@ function installLatestFromPkgDmg() {
     echo "`date` - ${appName}.app failed to install to ${appHomeDirectory}..."
     abortMission
   else
-    echo "`date` - Error at function: installLatest"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
     exit 1
   fi
@@ -2374,6 +2410,8 @@ function installLatestFromPkgDmg() {
 function checkLatestInstall() {
 
   if [[ -a "${appFullHomeDirectory}" ]]; then
+    echo ""
+    echo "`date` - Checking installation of ${appName}..."
 
     newInstalledVersion=$(defaults read ${plistDirectory} ${plistVersionString})
 
@@ -2395,7 +2433,7 @@ function checkLatestInstall() {
     fi
 
   else
-    echo "`date` - Error at function: checkLatestInstall"
+    echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: The newly installed app is not at path: ${appFullHomeDirectory}."
     abortMission
   fi
