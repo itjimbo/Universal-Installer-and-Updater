@@ -1,5 +1,12 @@
 # Versions
 
+**Version 2022.05.30**
+- Added Support App (from root3nl software) and FileZilla app
+- Added support for app.tar.bz2 installers (FileZilla)
+- Removed downloading checksum files (checksums are stilled curled)
+- Added support for SHA512
+- Added files to clean up
+
 **Version 2022.05.26**
 - Added OpenVPN Connect app
 - Added log separator lines for legibility
