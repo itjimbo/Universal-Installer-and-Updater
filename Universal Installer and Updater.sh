@@ -3,7 +3,7 @@
 ################################################################################
 #                                                                              #
 # Title:    Universal Installer and Updater                                    #
-# Version:  2022.05.26                                                         #
+# Version:  2022.05.30                                                         #
 # Author:   github.com/itjimbo                                                 #
 #                                                                              #
 ################################################################################
@@ -19,6 +19,7 @@
 # Docker
 # Eclipse - Eclipse IDE For Enterprise Java And Web Developers
 # Figma
+# FileZilla
 # Google Chrome
 # JetBrains AppCode
 # JetBrains DataGrip
@@ -42,6 +43,7 @@
 # Sketch
 # Slack
 # Sourcetree
+# Support App
 # Wireshark
 # VMwareFusion (DO NOT USE. STILL IN TESTING.)
 
@@ -64,12 +66,9 @@ function AndroidStudio() {
   volumeName=$(hdiutil info | grep "Android Studio" | sed 's/^.*Volumes\///')
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -89,12 +88,9 @@ function AppCleaner() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -113,12 +109,9 @@ function Atom() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -139,12 +132,9 @@ function BeyondCompare() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -162,12 +152,9 @@ function CitrixWorkspace() {
   volumeName="Citrix Workspace"
   pkgName="Install Citrix Workspace"
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl -s "https://www.citrix.com/downloads/workspace-app/mac/workspace-app-for-mac-latest.html" | grep "SHA-256" | sed "s/<li>SHA-256 - //g" | sed "s/<\/li>//g" | sed 's/ //g' | sed 's/[^ -~]//g')
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$(curl -s "https://www.citrix.com/downloads/workspace-app/mac/workspace-app-for-mac-latest.html" | grep "SHA-256" | sed "s/<li>SHA-256 - //g" | sed "s/<\/li>//g" | sed 's/ //g' | sed 's/[^ -~]//g')
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -186,12 +173,9 @@ function CraftManager() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -211,12 +195,9 @@ function Docker() {
   volumeName="Docker"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -236,12 +217,9 @@ function EclipseIDEForEnterpriseJavaAndWebDevelopers() {
   volumeName="Eclipse"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -262,12 +240,31 @@ function Figma() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
+}
+
+#------------------------------------------------------------------------------#
+
+function FileZilla() {
+  appName="FileZilla"
+  appHomeDirectory="/Applications"
+  installerType="app.tar.bz2"
+  latestVersion=$(curl -fs "https://filezilla-project.org/download.php/" | grep "latest stable version" | grep -Eo '[0-9]+[.0-9]*' | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  getUniversalDownloadURL=$(curl -fs "https://filezilla-project.org/download.php/download.php?show_all=1" | grep "macosx" | grep -Eo '".*?"' | head -1 | tr -d '"' | sed 's/[^ -~]//g')
+  universalDownloadURL="${getUniversalDownloadURL}"
+  appIcon="FileZilla"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="5VPGKXL75N"
+  volumeName=""
+  pkgName=""
+  checksumAvailable="TRUE"
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$(curl -fs "https://filezilla-project.org/download.php/download.php?details=FileZilla_3.60.0_macosx-x86.app.tar.bz2" | grep "SHA-512" | grep -Eo '>.*?<' | tr -d ' <>' | tail -1 | sed 's/[^ -~]//g')
 }
 
 #------------------------------------------------------------------------------#
@@ -287,12 +284,9 @@ function GoogleChrome() {
   volumeName="Google Chrome"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -311,12 +305,9 @@ function JetBrainsAppCode() {
   volumeName="AppCode"
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$(curl -sf "https://download.jetbrains.com/objc/AppCode-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl -sf "https://download.jetbrains.com/objc/AppCode-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$(curl -sf "https://download.jetbrains.com/objc/AppCode-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  intelChecksum=$(curl -sf "https://download.jetbrains.com/objc/AppCode-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -335,12 +326,9 @@ function JetBrainsDataGrip() {
   volumeName="DataGrip"
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$(curl -sf "https://download.jetbrains.com/datagrip/datagrip-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl -sf "https://download.jetbrains.com/datagrip/datagrip-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$(curl -sf "https://download.jetbrains.com/datagrip/datagrip-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  intelChecksum=$(curl -sf "https://download.jetbrains.com/datagrip/datagrip-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -359,12 +347,9 @@ function JetBrainsIntelliJIDEACE() {
   volumeName="IntelliJ IDEA CE"
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$(curl -sf "https://download.jetbrains.com/idea/ideaIC-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl -sf "https://download.jetbrains.com/idea/ideaIC-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$(curl -sf "https://download.jetbrains.com/idea/ideaIC-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  intelChecksum=$(curl -sf "https://download.jetbrains.com/idea/ideaIC-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -383,12 +368,9 @@ function JetBrainsPyCharmCE() {
   volumeName="PyCharm CE"
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$(curl -sf "https://download.jetbrains.com/python/pycharm-community-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl -sf "https://download.jetbrains.com/python/pycharm-community-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$(curl -sf "https://download.jetbrains.com/python/pycharm-community-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  intelChecksum=$(curl -sf "https://download.jetbrains.com/python/pycharm-community-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -407,12 +389,9 @@ function JetBrainsRubyMine() {
   volumeName="RubyMine"
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$(curl -sf "https://download.jetbrains.com/ruby/RubyMine-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl -sf "https://download.jetbrains.com/ruby/RubyMine-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$(curl -sf "https://download.jetbrains.com/ruby/RubyMine-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  intelChecksum=$(curl -sf "https://download.jetbrains.com/ruby/RubyMine-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -431,12 +410,9 @@ function JetBrainsWebStorm() {
   volumeName="WebStorm"
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$(curl -sf "https://download.jetbrains.com/webstorm/WebStorm-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$(curl -sf "https://download.jetbrains.com/webstorm/WebStorm-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$(curl -sf "https://download.jetbrains.com/webstorm/WebStorm-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  intelChecksum=$(curl -sf "https://download.jetbrains.com/webstorm/WebStorm-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -455,12 +431,9 @@ function MicrosoftExcel() {
   volumeName=""
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525135" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525135" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
 }
 
 #------------------------------------------------------------------------------#
@@ -479,12 +452,9 @@ function MicrosoftOneDrive() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -503,12 +473,9 @@ function MicrosoftOutlook() {
   volumeName=""
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525137" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525137" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
 }
 
 #------------------------------------------------------------------------------#
@@ -527,12 +494,9 @@ function MicrosoftPowerPoint() {
   volumeName=""
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525136" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525136" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
 }
 
 #------------------------------------------------------------------------------#
@@ -551,12 +515,9 @@ function MicrosoftTeams() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -575,12 +536,9 @@ function MicrosoftVisualStudioCode() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -599,12 +557,9 @@ function MicrosoftWord() {
   volumeName=""
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525134" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$(curl -fs "https://docs.microsoft.com/en-us/officeupdates/update-history-office-for-mac" | grep -A 1 "https://go.microsoft.com/fwlink/p/?linkid=525134" | tail -1 | sed -e 's/.*>\(.*\)<.*/\1/' | tr '[:upper:]' '[:lower:]' | sed 's/[^ -~]//g')
 }
 
 #------------------------------------------------------------------------------#
@@ -624,12 +579,9 @@ function Miro() {
   volumeName="Miro"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -649,12 +601,9 @@ function MozillaFirefox() {
   volumeName="Firefox"
   pkgName=""
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$(curl "https://archive.mozilla.org/pub/firefox/releases/${latestVersion}/SHA256SUMS" | grep "mac/en-US/Firefox ${latestVersion}.dmg" | awk {'print $1'})
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$(curl "https://archive.mozilla.org/pub/firefox/releases/${latestVersion}/SHA256SUMS" | grep "mac/en-US/Firefox ${latestVersion}.dmg" | awk {'print $1'})
 }
 
 #------------------------------------------------------------------------------#
@@ -676,12 +625,9 @@ function OpenVPNConnect() {
   volumeName="OpenVPN Connect"
   pkgName="OpenVPN_Connect_${latestVersionNumberUnderscrore}(${latestBuildNumber})_Installer_signed"
   checksumAvailable="TRUE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "sha256 signature" | head -1 | sed -e 's/.*: \(.*\)<.*/\1/' | sed 's/[^ -~]//g')
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "sha256 signature" | head -1 | sed -e 's/.*: \(.*\)<.*/\1/' | sed 's/[^ -~]//g')
 }
 
 #------------------------------------------------------------------------------#
@@ -700,12 +646,9 @@ function pgAdmin() {
   volumeName="pgAdmin 4"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -724,12 +667,9 @@ function Postman() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -749,12 +689,9 @@ function Python3() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -773,12 +710,9 @@ function Sketch() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -802,12 +736,9 @@ function Slack() {
   volumeName="Slack"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -827,12 +758,32 @@ function Sourcetree() {
   volumeName=""
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
+}
+
+#------------------------------------------------------------------------------#
+
+# Support App by Root3
+# https://github.com/root3nl/SupportApp
+function SupportApp() {
+  appName="Support"
+  appHomeDirectory="/Applications"
+  installerType="pkg"
+  latestVersion=$(curl -fs "https://github.com/root3nl/SupportApp/tags" | grep "/root3nl/SupportApp/archive/refs/tags/" | grep -v "beta" | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/.$//' | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://github.com/root3nl/SupportApp/releases/download/v${latestVersion}/Support.${latestVersion}.pkg"
+  appIcon="AppIcon"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="98LJ4XBGYK"
+  volumeName=""
+  pkgName=""
+  checksumAvailable="FALSE"
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -851,12 +802,9 @@ function Wireshark() {
   volumeName="Wireshark ${latestVersion}"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 #------------------------------------------------------------------------------#
@@ -875,12 +823,9 @@ function VMwareFusion() {
   volumeName="Slack"
   pkgName=""
   checksumAvailable="FALSE"
-  armChecksumFromSite=$()
-  armChecksumFileDownload=""
-  intelChecksumFromSite=$()
-  intelChecksumFileDownload=""
-  universalChecksumFromSite=$()
-  universalChecksumFileDownload=""
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
 }
 
 ################################################################################
@@ -1959,10 +1904,25 @@ function checksumVariables() {
 
 # Obtains the SHA-256 checksum of the downloaded installer.
 function installerChecksum() {
-  shasum -a 256 ${installerFullDirectory} > ${installerChecksumFullDirectory}
-  installerChecksum=$(cat ${installerChecksumFullDirectory} | awk '{print $1}')
-  echo "`date` - SHA-256 of installer: ${installerChecksum}"
-  latestChecksum
+
+  if [[ "${#armChecksum}" == "64" || "${#intelChecksum}" == "64" || "${#universalChecksum}" == "64" ]]; then
+    siteChecksum="SHA256"
+    shasum -a 256 ${installerFullDirectory} > ${installerChecksumFullDirectory}
+    installerChecksum=$(cat ${installerChecksumFullDirectory} | awk '{print $1}')
+    echo "`date` - SHA-256 of installer: ${installerChecksum}"
+    latestChecksum
+  elif [[ "${#armChecksum}" == "128" || "${#intelChecksum}" == "128" || "${#universalChecksum}" == "128" ]]; then
+    siteChecksum="SHA512"
+    shasum -a 512 ${installerFullDirectory} > ${installerChecksumFullDirectory}
+    installerChecksum=$(cat ${installerChecksumFullDirectory} | awk '{print $1}')
+    echo "`date` - SHA-512 of installer: ${installerChecksum}"
+    latestChecksum
+  else
+    echo "`date` - Error at function: ${funcstack[1]}"
+    echo "`date` - Error details: Character count of checksums could not be completed."
+    echo "`date` - Abort mission..."
+    exit 1
+  fi
 }
 
 #------------------------------------------------------------------------------#
@@ -1970,56 +1930,47 @@ function installerChecksum() {
 # Downloads the latest version of the app's checksum file, and pulls the SHA256 checksum.
 function latestChecksum() {
   if [[ "${installerDownloadType}" == "arm" ]]; then
-    if [[ "${armChecksumFromSite}" != "" && "${armChecksumFileDownload}" == "" ]]; then
-      echo ${armChecksumFromSite} > ${checksumFullDirectory}
-      actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
+    echo ${armChecksum} > ${checksumFullDirectory}
+    actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
+    if [[ "${siteChecksum}" == "SHA256" ]]; then
       echo "`date` - SHA-256 via app site: ${actualChecksum}"
       verifyChecksums
-    elif [[ "${armChecksumFromSite}" == "" && "${armChecksumFileDownload}" != "" ]]; then
-      curl "${armChecksumFileDownload}" -s -L -o "${checksumFullDirectory}"
-      echo "`date` - Checksum file for latest version downloaded successfully..."
-      actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
-      echo "`date` - SHA-256 via app site: ${actualChecksum}"
+    elif [[ "${siteChecksum}" == "SHA512" ]]; then
+      echo "`date` - SHA-512 via app site: ${actualChecksum}"
       verifyChecksums
     else
       echo "`date` - Error at function: ${funcstack[1]}"
-      echo "`date` - Both armChecksumFromSite and armChecksumFileDownload variables are defined, or neither of them are defined."
       abortMission
     fi
+
   elif [[ "${installerDownloadType}" == "intel" ]]; then
-    if [[ "${intelChecksumFromSite}" != "" && "${intelChecksumFileDownload}" == "" ]]; then
-      echo ${intelChecksumFromSite} > ${checksumFullDirectory}
-      actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
+    echo ${intelChecksum} > ${checksumFullDirectory}
+    actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
+    if [[ "${siteChecksum}" == "SHA256" ]]; then
       echo "`date` - SHA-256 via app site: ${actualChecksum}"
       verifyChecksums
-    elif [[ "${intelChecksumFromSite}" == "" && "${intelChecksumFileDownload}" != "" ]]; then
-      curl "${intelChecksumFileDownload}" -s -L -o "${checksumFullDirectory}"
-      echo "`date` - Checksum file for latest version downloaded successfully..."
-      actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
-      echo "`date` - SHA-256 via app site: ${actualChecksum}"
+    elif [[ "${siteChecksum}" == "SHA512" ]]; then
+      echo "`date` - SHA-512 via app site: ${actualChecksum}"
       verifyChecksums
     else
       echo "`date` - Error at function: ${funcstack[1]}"
-      echo "`date` - Both intelChecksumFromSite and intelChecksumFileDownload variables are defined, or neither of them are defined."
       abortMission
     fi
+
   elif [[ "${installerDownloadType}" == "universal" ]]; then
-    if [[ "${universalChecksumFromSite}" != "" && "${universalChecksumFileDownload}" == "" ]]; then
-      echo ${universalChecksumFromSite} > ${checksumFullDirectory}
-      actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
+    echo ${universalChecksum} > ${checksumFullDirectory}
+    actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
+    if [[ "${siteChecksum}" == "SHA256" ]]; then
       echo "`date` - SHA-256 via app site: ${actualChecksum}"
       verifyChecksums
-    elif [[ "${universalChecksumFromSite}" == "" && "${universalChecksumFileDownload}" != "" ]]; then
-      curl "${universalChecksumFileDownload}" -s -L -o "${checksumFullDirectory}"
-      echo "`date` - Checksum file for latest version downloaded successfully..."
-      actualChecksum=$(cat ${checksumFullDirectory} | awk '{print $1}')
-      echo "`date` - SHA-256 via app site: ${actualChecksum}"
+    elif [[ "${siteChecksum}" == "SHA512" ]]; then
+      echo "`date` - SHA-512 via app site: ${actualChecksum}"
       verifyChecksums
     else
       echo "`date` - Error at function: ${funcstack[1]}"
-      echo "`date` - Both universalChecksumFromSite and universalChecksumFileDownload variables are defined, or neither of them are defined."
       abortMission
     fi
+
   else
     echo "`date` - Error at function: ${funcstack[1]}"
     echo "`date` - Error details: installerDownloadType variable could not be defined."
@@ -2106,6 +2057,9 @@ function determineInstaller() {
   elif [[ "${installerType}" == "Figma.zip" ]]; then
     echo "`date` - Installer type: Figma.zip"
     installLatestFromFigmaZip
+  elif [[ "${installerType}" == "app.tar.bz2" ]]; then
+    echo "`date` - Installer type: app.tar.bz2"
+    installLatestFromAppTarBz2
   elif [[ "${installerType}" == "app" ]]; then
     echo "`date` - Installer type: app"
     installLatestFromApp
@@ -2324,6 +2278,50 @@ function installLatestFromFigmaZip() {
   fi
 
   checkLatestInstall
+}
+
+#------------------------------------------------------------------------------#
+
+function installLatestFromAppTarBz2() {
+  echo "`date` - Installing from bz2 file..."
+  installAttemptCounter=0
+
+  until [[ -a "${appFullHomeDirectory}" ]]; do
+    ((installAttemptCounter++))
+    echo "`date` - Changing directory to /private/tmp..."
+    cd /private/tmp
+    echo "`date` - Extracting ${installerFullDirectory}..."
+    bunzip2 -k "${installerFullDirectory}"
+    sleep 3
+    tar -xf "${appName}.app.tar"
+    sleep 3
+    echo "`date` - Moving ${appName}.app to ${appHomeDirectory}..."
+    mv "${appName}.app" "${appHomeDirectory}"
+    sleep 1
+    if [[ ! -a "${appFullHomeDirectory}" && "${installAttemptCounter}" == "1" ]]; then
+      echo "`date` - First attempt to install app failed."
+    elif [[ ! -a "${appFullHomeDirectory}" && "${installAttemptCounter}" == "2" ]]; then
+      echo "`date` - Second attempt to install app failed."
+    elif [[ ! -a "${appFullHomeDirectory}" && "${installAttemptCounter}" == "3" ]]; then
+      echo "`date` - Third attempt to install app failed."
+      break
+    else
+      break
+    fi
+    sleep 1
+  done
+
+  if [[ -a "${appFullHomeDirectory}" ]]; then
+    echo "`date` - ${appName}.app was successfully moved to ${appHomeDirectory}."
+    checkLatestInstall
+  elif [[ ! -a "${appFullHomeDirectory}" ]]; then
+    echo "`date` - ${appName}.app failed to move to ${appHomeDirectory}..."
+    abortMission
+  else
+    echo "`date` - Error at function: ${funcstack[1]}"
+    echo "`date` - Error details: Could not determine if ${appName} exists at ${appHomeDirectory}."
+    exit 1
+  fi
 }
 
 #------------------------------------------------------------------------------#
@@ -2547,6 +2545,12 @@ function cleanUpPreInstall() {
 
   # Deletes any previously unzipped temp files from the /private/tmp directory.
   rm -rf "/private/tmp/__MACOSX"
+
+  # Deletes any previously attempted app.tar.bz2 files.
+  rm -rf "/private/tmp/${appName}.app.tar.bz2"
+
+  # Deletes any previously attempted app.tar files.
+  rm -rf "/private/tmp/${appName}.app.tar"
 }
 
 #------------------------------------------------------------------------------#
@@ -2576,6 +2580,12 @@ function cleanUp() {
 
   # Deletes any previously unzipped temp files from the /private/tmp directory.
   rm -rf "/private/tmp/__MACOSX"
+
+  # Deletes any previously attempted app.tar.bz2 files.
+  rm -rf "/private/tmp/${appName}.app.tar.bz2"
+
+  # Deletes any previously attempted app.tar files.
+  rm -rf "/private/tmp/${appName}.app.tar"
 }
 
 #------------------------------------------------------------------------------#
