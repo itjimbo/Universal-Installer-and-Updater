@@ -1,5 +1,18 @@
 # Versions
 
+**Version 2022.06.03**
+- Added the following apps:
+   - Adobe Acrobat DC (still in testing stages, do not use)
+   - Adobe Acrobat Reader DC (still in testing stages, do not use)
+   - Adobe Creative Cloud (still in testing stages, do not use)
+   - Appium Server GUI
+   - Appium Inspector
+- Renamed some variables
+- Fixed FileZilla universalChecksum
+- Fixed pgAdmin latestVersion
+- Updated comments and echo commands for logging legibility 
+- Simplified the version compare functions by utilizing sort -V 
+
 **Version 2022.05.30**
 - Added Support App (from root3nl software) and FileZilla app
 - Added support for app.tar.bz2 installers (FileZilla)
