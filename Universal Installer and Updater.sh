@@ -3,15 +3,20 @@
 ################################################################################
 #                                                                              #
 # Title:    Universal Installer and Updater                                    #
-# Version:  2022.05.30                                                         #
+# Version:  2022.06.03                                                         #
 # Author:   github.com/itjimbo                                                 #
 #                                                                              #
 ################################################################################
 
 # List of applications this script can install/update:
 
+# Adobe Acrobat DC (DO NOT USE. STILL IN TESTING.)
+# Adobe Acrobat Reader DC (DO NOT USE. STILL IN TESTING.)
+# Adobe Creative Cloud (DO NOT USE. STILL IN TESTING.)
 # Android Studio (DO NOT USE. STILL IN TESTING)
 # AppCleaner
+# Appium Inspector
+# Appium Server GUI
 # Atom
 # Beyond Compare
 # Citrix Workspace (DO NOT USE. STILL IN TESTING.)
@@ -51,6 +56,84 @@
 #                         ADD APPS BETWEEN HERE...                             #
 ################################################################################
 
+function AdobeAcrobatDC() {
+  appName="Adobe Acrobat"
+  appHomeDirectory="/Applications/Adobe Acrobat DC"
+  installerType="pkg.dmg"
+  latestVersionLink=$(curl -s https://helpx.adobe.com/acrobat/release-note/release-notes-acrobat-reader.html | grep -w "<td><a" | head -1 | cut -d '"' -f2 | sed 's/[^ -~]//g')
+  latestVersionFull=$(curl -fs "${latestVersionLink}" | grep ".dmg" | head -1 | grep -Eo '[0-9]*' | tail -1 | sed 's/[^ -~]//g')
+  latestVersion=$(echo ${latestVersionFull} | sed 's/./&./2' | sed 's/./&./6' | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://trials.adobe.com/AdobeProducts/APRO/Acrobat_HelpX/osx10/Acrobat_DC_Web_WWMUI.dmg"
+  appIcon="ACP_App"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="JQ525L2MZD"
+  volumeName="Acrobat DC"
+  pkgNameInVolume="Acrobat DC Installer"
+  pkgSubfoldersInVolume="Acrobat DC"
+  checksumAvailable="FALSE"
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
+}
+
+#------------------------------------------------------------------------------#
+
+function AdobeAcrobatReaderDC() {
+  appName="Adobe Acrobat Reader DC"
+  appHomeDirectory="/Applications"
+  installerType="pkg.dmg"
+  latestVersionLink=$(curl -fs https://helpx.adobe.com/acrobat/release-note/release-notes-acrobat-reader.html | grep -w "<td><a" | head -1 | cut -d '"' -f2 | sed 's/[^ -~]//g')
+  latestVersionFull=$(curl -fs "${latestVersionLink}" | grep ".dmg" | tail -1 | grep -Eo '[0-9]*' | tail -1 | sed 's/[^ -~]//g')
+  latestVersion=$(echo ${latestVersionFull} | sed 's/./&./2' | sed 's/./&./6' | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://ardownload2.adobe.com/pub/adobe/reader/mac/AcrobatDC/${latestVersionFull}/AcroRdrDC_${latestVersionFull}_MUI.dmg"
+  appIcon="ACP_App"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="JQ525L2MZD"
+  volumeName="AcroRdrDC_${latestVersionFull}_MUI"
+  pkgNameInVolume="AcroRdrDC_${latestVersionFull}_MUI"
+  checksumAvailable="FALSE"
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
+}
+
+#------------------------------------------------------------------------------#
+
+# https://ccmdl.adobe.com/AdobeProducts/KCCC/CCD/5_7_1/macarm64/ACCCx5_7_1_1.dmg
+# https://ccmdl.adobe.com/AdobeProducts/KCCC/CCD/5_7_1/osx10/ACCCx5_7_1_1.dmg
+function AdobeCreativeCloud() {
+  appName="Creative Cloud"
+  appHomeDirectory="/Applications/Utilities/Adobe Creative Cloud/ACC"
+  installerType="pkg.dmg"
+  latestVersionMainFull=$(curl -fs "https://helpx.adobe.com/download-install/kb/creative-cloud-desktop-app-download.html" | grep -o "https*.*macarm64.*dmg" | cut -d '"' -f1 | head -1 | grep -Eo '[0-9]+[_0-9]*' | head -1 | sed 's/[^ -~]//g')
+  latestVersionFull=$(curl -fs "https://helpx.adobe.com/download-install/kb/creative-cloud-desktop-app-download.html" | grep -o "https*.*macarm64.*dmg" | cut -d '"' -f1 | head -1 | grep -Eo '[0-9]+[_0-9]*' | tail -1 | sed 's/[^ -~]//g')
+  latestVersion=$(echo ${latestVersionFull} | tr '_' '.' | sed 's/[^ -~]//g')
+  armDownloadURL=$(curl -fs "https://helpx.adobe.com/download-install/kb/creative-cloud-desktop-app-download.html" | grep -o "https*.*macarm64.*dmg" | cut -d '"' -f1 | head -1)
+  intelDownloadURL=$(curl -fs "https://helpx.adobe.com/download-install/kb/creative-cloud-desktop-app-download.html" | grep -o "https*.*osx10.*dmg" | cut -d '"' -f1 | head -1)
+  universalDownloadURL=""
+  appIcon="CreativeCloudApp"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="JQ525L2MZD"
+  volumeName="Creative Cloud"
+  pkgNameInVolume="Install"
+  checksumAvailable="FALSE"
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
+}
+
+# MUST INSTALL WITH:
+# /Volumes/Creative\ Cloud/Install.app/Contents/MacOS/Install --mode=silent
+#
+# AND FIGMA WITH:
+# /Applications/Figma.app/Contents/MacOS/DynamicUniversalApp
+
+#------------------------------------------------------------------------------#
+
 # DO NOT USE. STILL IN TESTING.
 function AndroidStudio() {
   appName="Android Studio"
@@ -64,7 +147,7 @@ function AndroidStudio() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="EQHXZ8M8AV"
   volumeName=$(hdiutil info | grep "Android Studio" | sed 's/^.*Volumes\///')
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
@@ -86,7 +169,49 @@ function AppCleaner() {
   #downloadURL=$(curl -fs https://freemacsoft.net/appcleaner/Updates.xml | xpath '//rss/channel/*/enclosure/@url' 2>/dev/null | tr " " "\n" | sort | tail -1 | cut -d '"' -f 2)
   officialTeamIdentifier="X85ZX835W9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
+  checksumAvailable="FALSE"
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
+}
+
+#------------------------------------------------------------------------------#
+
+function AppiumInspector() {
+  appName="Appium Inspector"
+  appHomeDirectory="/Applications"
+  installerType="dmg"
+  latestVersion=$(curl -fs "https://github.com/appium/appium-inspector/releases" | grep "mac.zip" | sed -e 's/.*Appium-Inspector-\(.*\)-universal-mac.zip.*/\1/' | head -1 | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://github.com/appium/appium-inspector/releases/download/v${latestVersion}/Appium-Inspector-mac-${latestVersion}.dmg"
+  appIcon="icon"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="UY52UFTVTM"
+  volumeName="Appium Inspector ${latestVersion}-universal"
+  pkgNameInVolume=""
+  checksumAvailable="FALSE"
+  armChecksum=$()
+  intelChecksum=$()
+  universalChecksum=$()
+}
+
+#------------------------------------------------------------------------------#
+
+function AppiumServerGUI() {
+  appName="Appium Server GUI"
+  appHomeDirectory="/Applications"
+  installerType="dmg"
+  latestVersion=$(curl -fs "https://github.com/appium/appium-desktop/releases" | grep "mac.zip" | sed -e 's/.*Appium-Server-GUI-\(.*\)-mac.zip.*/\1/' | head -1 | sed 's/[^ -~]//g')
+  armDownloadURL=""
+  intelDownloadURL=""
+  universalDownloadURL="https://github.com/appium/appium-desktop/releases/download/v${latestVersion}/Appium-Server-GUI-mac-${latestVersion}.dmg"
+  appIcon="icon"
+  plistVersionString="CFBundleShortVersionString"
+  officialTeamIdentifier="UY52UFTVTM"
+  volumeName="Appium Server GUI ${latestVersion}"
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -107,7 +232,7 @@ function Atom() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="VEKTX9H2N7"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -120,8 +245,8 @@ function BeyondCompare() {
   appName="Beyond Compare"
   appHomeDirectory="/Applications"
   installerType="zip"
-  latestVersionNumber=$(curl "https://www.scootersoftware.com/download.php" | grep "Current Version" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
-  latestBuildNumber=$(curl "https://www.scootersoftware.com/download.php" | grep "Current Version" | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/[^ -~]//g')
+  latestVersionNumber=$(curl -fs "https://www.scootersoftware.com/download.php" | grep "Current Version" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
+  latestBuildNumber=$(curl -fs "https://www.scootersoftware.com/download.php" | grep "Current Version" | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/[^ -~]//g')
   latestVersion="${latestVersionNumber}.${latestBuildNumber}"
   armDownloadURL=""
   intelDownloadURL=""
@@ -130,7 +255,7 @@ function BeyondCompare() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="BS29TEJF86"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -150,7 +275,7 @@ function CitrixWorkspace() {
   plistVersionString="CitrixVersionString"
   officialTeamIdentifier="S272Y5R93J"
   volumeName="Citrix Workspace"
-  pkgName="Install Citrix Workspace"
+  pkgNameInVolume="Install Citrix Workspace"
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$(curl -s "https://www.citrix.com/downloads/workspace-app/mac/workspace-app-for-mac-latest.html" | grep "SHA-256" | sed "s/<li>SHA-256 - //g" | sed "s/<\/li>//g" | sed 's/ //g' | sed 's/[^ -~]//g')
@@ -171,7 +296,7 @@ function CraftManager() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="VRXQSNCL5W"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -193,7 +318,7 @@ function Docker() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="9BNSXJN65R"
   volumeName="Docker"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -206,8 +331,8 @@ function EclipseIDEForEnterpriseJavaAndWebDevelopers() {
   appName="Eclipse"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestStableRelease=$(curl "https://www.eclipse.org/downloads/" | grep "&#8209;" | sed "s/&#8209;/-/g" | tail -1 | grep -Eo "[0-9]+[-0-9]*" | tail -2 | head -1 | sed 's/[^ -~]//g')
-  latestVersion=$(curl "https://www.eclipse.org/downloads/packages/" | grep "Eclipse ${latestStableRelease}" | grep -Eo "[0-9]+[.0-9]*" | tail -1 | sed 's/[^ -~]//g')
+  latestStableRelease=$(curl -fs "https://www.eclipse.org/downloads/" | grep "&#8209;" | sed "s/&#8209;/-/g" | tail -1 | grep -Eo "[0-9]+[-0-9]*" | tail -2 | head -1 | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fs "https://www.eclipse.org/downloads/packages/" | grep "Eclipse ${latestStableRelease}" | grep -Eo "[0-9]+[.0-9]*" | tail -1 | sed 's/[^ -~]//g')
   armDownloadURL="https://mirrors.jevincanders.net/eclipse/technology/epp/downloads/release/${latestStableRelease}/R/eclipse-jee-${latestStableRelease}-R-macosx-cocoa-aarch64.dmg"
   intelDownloadURL="https://mirrors.jevincanders.net/eclipse/technology/epp/downloads/release/${latestStableRelease}/R/eclipse-jee-${latestStableRelease}-R-macosx-cocoa-x86_64.dmg"
   universalDownloadURL=""
@@ -215,7 +340,7 @@ function EclipseIDEForEnterpriseJavaAndWebDevelopers() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="JCDTMS22B4"
   volumeName="Eclipse"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -238,7 +363,7 @@ function Figma() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="T8RA8NE3B7"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -260,11 +385,11 @@ function FileZilla() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="5VPGKXL75N"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
-  universalChecksum=$(curl -fs "https://filezilla-project.org/download.php/download.php?details=FileZilla_3.60.0_macosx-x86.app.tar.bz2" | grep "SHA-512" | grep -Eo '>.*?<' | tr -d ' <>' | tail -1 | sed 's/[^ -~]//g')
+  universalChecksum=$(curl -fs "https://filezilla-project.org/download.php/download.php?details=FileZilla_${latestVersion}_macosx-x86.app.tar.bz2" | grep "SHA-512" | grep -Eo '>.*?<' | tr -d ' <>' | tail -1 | sed 's/[^ -~]//g')
 }
 
 #------------------------------------------------------------------------------#
@@ -282,7 +407,7 @@ function GoogleChrome() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="EQHXZ8M8AV"
   volumeName="Google Chrome"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -303,7 +428,7 @@ function JetBrainsAppCode() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
   volumeName="AppCode"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$(curl -sf "https://download.jetbrains.com/objc/AppCode-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
   intelChecksum=$(curl -sf "https://download.jetbrains.com/objc/AppCode-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
@@ -324,7 +449,7 @@ function JetBrainsDataGrip() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
   volumeName="DataGrip"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$(curl -sf "https://download.jetbrains.com/datagrip/datagrip-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
   intelChecksum=$(curl -sf "https://download.jetbrains.com/datagrip/datagrip-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
@@ -345,7 +470,7 @@ function JetBrainsIntelliJIDEACE() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
   volumeName="IntelliJ IDEA CE"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$(curl -sf "https://download.jetbrains.com/idea/ideaIC-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
   intelChecksum=$(curl -sf "https://download.jetbrains.com/idea/ideaIC-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
@@ -366,7 +491,7 @@ function JetBrainsPyCharmCE() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
   volumeName="PyCharm CE"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$(curl -sf "https://download.jetbrains.com/python/pycharm-community-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
   intelChecksum=$(curl -sf "https://download.jetbrains.com/python/pycharm-community-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
@@ -387,7 +512,7 @@ function JetBrainsRubyMine() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
   volumeName="RubyMine"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$(curl -sf "https://download.jetbrains.com/ruby/RubyMine-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
   intelChecksum=$(curl -sf "https://download.jetbrains.com/ruby/RubyMine-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
@@ -408,7 +533,7 @@ function JetBrainsWebStorm() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="2ZEFAR8TH3"
   volumeName="WebStorm"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$(curl -sf "https://download.jetbrains.com/webstorm/WebStorm-${latestVersion}-aarch64.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
   intelChecksum=$(curl -sf "https://download.jetbrains.com/webstorm/WebStorm-${latestVersion}.dmg.sha256" | awk {'print $1'} | sed 's/[^ -~]//g')
@@ -429,7 +554,7 @@ function MicrosoftExcel() {
   plistVersionString="CFBundleVersion"
   officialTeamIdentifier="UBF8T346G9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
@@ -450,7 +575,7 @@ function MicrosoftOneDrive() {
   plistVersionString="CFBundleVersion"
   officialTeamIdentifier="UBF8T346G9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -471,7 +596,7 @@ function MicrosoftOutlook() {
   plistVersionString="CFBundleVersion"
   officialTeamIdentifier="UBF8T346G9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
@@ -492,7 +617,7 @@ function MicrosoftPowerPoint() {
   plistVersionString="CFBundleVersion"
   officialTeamIdentifier="UBF8T346G9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
@@ -513,7 +638,7 @@ function MicrosoftTeams() {
   plistVersionString="CFBundleGetInfoString"
   officialTeamIdentifier="UBF8T346G9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -534,7 +659,7 @@ function MicrosoftVisualStudioCode() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="UBF8T346G9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -555,7 +680,7 @@ function MicrosoftWord() {
   plistVersionString="CFBundleVersion"
   officialTeamIdentifier="UBF8T346G9"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
@@ -577,7 +702,7 @@ function Miro() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="M3GM7MFY7U"
   volumeName="Miro"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -599,7 +724,7 @@ function MozillaFirefox() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="43AQ936H96"
   volumeName="Firefox"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
@@ -612,18 +737,17 @@ function OpenVPNConnect() {
   appName="OpenVPN Connect"
   appHomeDirectory="/Applications/OpenVPN Connect"
   installerType="pkg.dmg"
-  latestVersionNumber=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "Release notes for" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
-  latestVersionNumberUnderscrore=$(echo ${latestVersionNumber} | tr '.' '_')
+  latestVersion=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "Release notes for" | grep -Eo '[0-9]+[.0-9]*' | head -1 | sed 's/[^ -~]//g')
+  latestVersionUnderscore=$(echo ${latestVersion} | tr '.' '_')
   latestBuildNumber=$(curl -fs "https://openvpn.net/client-connect-vpn-for-mac-os/" | grep "Release notes for" | grep -Eo '[0-9]+[.0-9]*' | head -2 | tail -1 | sed 's/[^ -~]//g')
-  latestVersion="${latestVersionNumber}"
   armDownloadURL=""
   intelDownloadURL=""
-  universalDownloadURL="https://swupdate.openvpn.net/downloads/connect/openvpn-connect-${latestVersionNumber}.${latestBuildNumber}_signed.dmg"
+  universalDownloadURL="https://swupdate.openvpn.net/downloads/connect/openvpn-connect-${latestVersion}.${latestBuildNumber}_signed.dmg"
   appIcon="electron"
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="ACV7L3WCD8"
   volumeName="OpenVPN Connect"
-  pkgName="OpenVPN_Connect_${latestVersionNumberUnderscrore}(${latestBuildNumber})_Installer_signed"
+  pkgNameInVolume="OpenVPN_Connect_${latestVersionUnderscore}(${latestBuildNumber})_Installer_signed"
   checksumAvailable="TRUE"
   armChecksum=$()
   intelChecksum=$()
@@ -636,7 +760,7 @@ function pgAdmin() {
   appName="pgAdmin 4"
   appHomeDirectory="/Applications"
   installerType="dmg"
-  latestVersion=$(curl -s "https://pgadmin-archive.postgresql.org/pgadmin4/index.html" | grep -Eo '[0-9]+[.0-9]*' | tail -4 | head -1 | sed 's/[^ -~]//g')
+  latestVersion=$(curl -fs "https://www.pgadmin.org/download/pgadmin-4-macos/" | grep "https://www.postgresql.org/ftp/pgadmin/*.*macos/"  | head -1 | cut -d '"' -f8 | grep -Eo '[0-9]+[.0-9]*' | tail -1 | sed 's/[^ -~]//g')
   armDownloadURL=""
   intelDownloadURL=""
   universalDownloadURL="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${latestVersion}/macos/pgadmin4-${latestVersion}.dmg"
@@ -644,7 +768,7 @@ function pgAdmin() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="26QKX55P9K"
   volumeName="pgAdmin 4"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -665,7 +789,7 @@ function Postman() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="H7H8Q7M5CK"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -687,7 +811,7 @@ function Python3() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="DJ3H93M7VJ"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -708,7 +832,7 @@ function Sketch() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="WUGMZZ5K46"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -734,7 +858,7 @@ function Slack() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="BQR82RBBHL"
   volumeName="Slack"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -756,7 +880,7 @@ function Sourcetree() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="UPXU4CQZ5P"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -779,7 +903,7 @@ function SupportApp() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="98LJ4XBGYK"
   volumeName=""
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -800,7 +924,7 @@ function Wireshark() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="7Z6EMTD2C6"
   volumeName="Wireshark ${latestVersion}"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -821,7 +945,7 @@ function VMwareFusion() {
   plistVersionString="CFBundleShortVersionString"
   officialTeamIdentifier="EG7KH642X6"
   volumeName="Slack"
-  pkgName=""
+  pkgNameInVolume=""
   checksumAvailable="FALSE"
   armChecksum=$()
   intelChecksum=$()
@@ -971,17 +1095,17 @@ function finalDeferralPrompt() {
 
 function jamfHelperVariables() {
 
-  # Add the path for an error icon.
-  # Default icon is: /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns
-  jamfHelperErrorIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns"
-
   # Creates a new blank line for Jamf Helper.
   NL=$'\n'
+
+  # The path to an error icon.
+  # Default icon is: /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns
+  jamfHelperErrorIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns"
 
   # Path to the app's icon file.
   appIconFullDirectory="${appHomeDirectory}/${appName}.app/Contents/Resources/${appIcon}.icns"
 
-  # Continue to the next function...
+  # Proceed to the logProcess function...
   logProcess
 }
 
@@ -990,13 +1114,13 @@ function jamfHelperVariables() {
 # Checks if a log file exists. If not, one will be created.
 function logProcess () {
 
-  # Condenses the app name to exclude all characters (including spaces) that are not letters or numbers.
-  # Example: Microsoft Visual Studio Code = MicrosoftVisualStudioCode
-  appNameCondensed=$(echo ${appName} | tr -dc '[:alnum:]')
+  # Formats the app name to use underscores instead of spaces for logging purposes.
+  # Example: Microsoft Visual Studio Code = Microsoft_Visual_Studio_Code
+  appNameUnderscore=$(echo ${appName} | tr ' ' '_')
 
   # Defines the path for the log file.
   # _iu stands for install/update
-  logFile="/Library/Logs/jamf_${appNameCondensed}_iu.log"
+  logFile="/Library/Logs/jamf_${appNameUnderscore}_iu.log"
 
   if [[ ! -e ${logFile} ]]; then
     touch ${logFile} && exec >> ${logFile}
@@ -1036,7 +1160,7 @@ function debugStart() {
 function deviceInformation() {
 
   echo ""
-  echo "`date` - Checking device information..."
+  echo "`date` - Getting device information..."
 
   # Obtains the version number of macOS.
   macOSVersion=$(sw_vers -productVersion)
@@ -1050,25 +1174,26 @@ function deviceInformation() {
   if [[ "${processorArchitecture}" == "x86_64" ]]; then
     processorType="Intel"
   elif [[ "${processorArchitecture}" == "arm64" ]]; then
-    processorType="Arm"
+    processorType="ARM"
   elif [[ "${processorArchitecture}" == "" ]]; then
     echo "`date` - Error at function: ${funcstack[1]}"
-    echo "`date` - Error details: processor is blank"
+    echo "`date` - Error details: processorArchitecture variable could not be defined."
     exit 1
   else
     echo "`date` - Error at function: ${funcstack[1]}"
-    echo "`date` - Error details: Processor type cannot be determined."
+    echo "`date` - Error details: processorArchitecture variable is not recognized."
     echo "`date` - processorArchitecture: ${processorArchitecture}"
     exit 1
   fi
 
   # Obtains the amount of disk space available.
-  diskSpaceAvailable=$(df -m | awk {'print $4'} | head -n 2 | tail -n 1)
+  diskSpaceAvailableMB=$(df -m | awk {'print $4'} | head -2 | tail -1)
+  diskSpaceAvailableGB=$(df -h | awk {'print $4'} | head -2 | tail -1 | tr -d 'Gi')
 
   echo "`date` - macOS version: ${macOSVersion}"
   echo "`date` - macOS build: ${macOSBuild}"
   echo "`date` - Processor type: ${processorType}"
-  echo "`date` - Available disk space: ${diskSpaceAvailable} MB"
+  echo "`date` - Available disk space: ${diskSpaceAvailableMB} MB | ${diskSpaceAvailableGB} GB"
 
   parameterCheck
 
@@ -1097,7 +1222,7 @@ function parameterCheck() {
   echo "`date` - Testing JAMF parameters..."
 
   if [[ "${basePath}" != "" ]]; then
-    echo "`date` - Parameter 01 - check: Pass"
+    :
   else
     echo "`date` - Parameter 01 - check: Fail"
     echo "`date` - Failure details: Parameter 01 (BASE PATH) cannot be defined."
@@ -1106,7 +1231,7 @@ function parameterCheck() {
   fi
 
   if [[ "${computerName}" != "" ]]; then
-    echo "`date` - Parameter 02 - check: Pass"
+    :
   else
     echo "`date` - Parameter 02 - check: Fail"
     echo "`date` - Failure details: Parameter 02 (COMPUTER NAME) cannot be defined."
@@ -1115,7 +1240,7 @@ function parameterCheck() {
   fi
 
   if [[ "${userName}" != "" ]]; then
-    echo "`date` - Parameter 03 - check: Pass"
+    :
   else
     echo "`date` - Parameter 03 - check: Fail"
     echo "`date` - Failure details: Parameter 03 (USER NAME) cannot be defined."
@@ -1124,7 +1249,7 @@ function parameterCheck() {
   fi
 
   if [[ "${debugMode}" == "TRUE" || "${debugMode}" == "FALSE" ]]; then
-    echo "`date` - Parameter 04 - check: Pass"
+    :
   else
     echo "`date` - Parameter 04 - check: Fail"
     echo "`date` - Failure details: Illegal value in parameter 4 (DEBUG MODE)."
@@ -1133,7 +1258,7 @@ function parameterCheck() {
   fi
 
   if [[ "${applicationName}" != "" ]]; then
-    echo "`date` - Parameter 05 - check: Pass"
+    :
   else
     echo "`date` - Parameter 05 - check: Fail"
     echo "`date` - Failure details: Illegal value in parameter 05 (APPLICATION NAME)."
@@ -1142,7 +1267,7 @@ function parameterCheck() {
   fi
 
   if [[ "${requiredDiskSpace}" == "NA" || "${requiredDiskSpace}" -ge "0" ]]; then
-    echo "`date` - Parameter 06 - check: Pass"
+    :
   else
     echo "`date` - Parameter 06 - check: Fail"
     echo "`date` - Failure details: Illegal value in parameter 6 (REQUIRED DISK SPACE)."
@@ -1151,7 +1276,7 @@ function parameterCheck() {
   fi
 
   if [[ "${deferralDays}" == "NA" || "${deferralDays}" == "0" || "${deferralDays}" -ge "1" ]]; then
-    echo "`date` - Parameter 07 - check: Pass"
+    :
   else
     echo "`date` - Parameter 07 - check: Fail"
     echo "`date` - Failure details: Illegal value in parameter 07 (DEFERRAL DAYS)."
@@ -1160,7 +1285,7 @@ function parameterCheck() {
   fi
 
   if [[ "${prompts}" == "TRUE" || "${prompts}" == "FALSE" ]]; then
-    echo "`date` - Parameter 08 - check: Pass"
+    :
   else
     echo "`date` - Parameter 08 - check: Fail"
     echo "`date` - Failure details: Illegal value in parameter 08 (UPDATE PROMPT)."
@@ -1169,7 +1294,7 @@ function parameterCheck() {
   fi
 
   if [[ "${updatingWindow}" == "TRUE" || "${updatingWindow}" == "FALSE" ]]; then
-    echo "`date` - Parameter 09 - check: Pass"
+    :
   else
     echo "`date` - Parameter 09 - check: Fail"
     echo "`date` - Failure details: Illegal value in parameter 09 (UPDATING WINDOW). Value must be TRUE or FALSE."
@@ -1183,20 +1308,21 @@ function parameterCheck() {
     echo "`date` - Abort mission..."
     exit 1
   elif [[ "${definedLatestVersion}" == "NA" ]]; then
-    echo "`date` - Parameter 10 - check: Pass"
-  elif [[ "${definedLatestVersion}" != "" ]]; then
-    echo "`date` - Parameter 10 - check: Pass"
+    :
   else
-    echo "`date` - Parameter 10 - check: Pass"
+    :
   fi
 
   if [[ "${notUsedParameter11}" != "" ]]; then
     echo "`date` - Parameter 11 - check: Fail"
     echo "`date` - Parameter 11 is in use, but not defined in the script."
+    echo "`date` - Abort mission..."
+    exit 1
   else
-    echo "`date` - Parameter 11 - check: Pass"
+    :
   fi
 
+  echo "`date` - Did all parameters pass: Yes"
   appInstalledCheck
 
 }
@@ -1207,7 +1333,7 @@ function parameterCheck() {
 function appInstalledCheck() {
 
   echo ""
-  echo "`date` - Checking ${appName} on device..."
+  echo "`date` - Checking ${appName} on computer..."
 
   # Defines the full path of the application.
   appFullHomeDirectory="${appHomeDirectory}/${appName}.app"
@@ -1223,7 +1349,7 @@ function appInstalledCheck() {
 
     installedVersionVariables
     latestVersionVariables
-    checkVersionFirstCharacter
+    compareVersions
 
   else
 
@@ -1244,15 +1370,6 @@ function installedVersionVariables() {
   # Reads the version number from the installed app's Info.plist file.
   installedVersion=$(defaults read ${plistDirectory} ${plistVersionString})
 
-  # Removes all special characters from the installed version number.
-  # Example: "1.2.3 (456)" = "123456"
-  installedVersionCondensed=$(echo ${installedVersion} | tr -dc '[:digit:]')
-
-  # Counts the number of characters in the installedVersionCondensed variable.
-  # Example: 567 = 3
-  installedVersionDigitCount=${#installedVersionCondensed}
-
-  installedVersionCondensedFirstCharacter=${installedVersionCondensed:0:1}
 }
 
 #------------------------------------------------------------------------------#
@@ -1260,136 +1377,71 @@ function installedVersionVariables() {
 # Defines the variables that gather the installed and latest versions available.
 function latestVersionVariables() {
 
-  if [[ "${definedLatestVersion}" == "NA" ]]; then
-    # Removes all special characters from the latest version number.
-    # Example: "1.2.3 (456)" = "123456"
-    latestVersionCondensed=$(echo ${latestVersion} | tr -dc '[:digit:]')
+  if [[ "${definedLatestVersion}" == "NA" && "${latestVersion}" == "" ]]; then
+    echo "`date` - Error at function: ${funcstack[1]}"
+    echo "`date` - Error details: latestVersion variable could not be defined."
+    echo "`date` - Abort mission..."
+    exit 1
 
-    # Counts the number of characters in the latestVersionCondensed variable.
-    # Example: 567 = 3
-    latestVersionDigitCount=${#latestVersionCondensed}
+  elif [[ "${definedLatestVersion}" != "NA" && "${latestVersion}" != "" ]]; then
+    echo "`date` - Error at function: ${funcstack[1]}"
+    Parameter 10 - Defined latest version
+    echo "`date` - Error details: Parameter 10 (LATEST VERSION) and latestVersion variable are both defined. Only one can be defined."
+    echo "`date` - Abort mission..."
+    exit 1
 
-    latestVersionCondensedFirstCharacter=${latestVersionCondensed:0:1}
-  else
-    latestVersion="${definedLatestVersion}"
-    # Removes all special characters from the latest version number.
-    # Example: "1.2.3 (456)" = "123456"
-    latestVersionCondensed=$(echo ${latestVersion} | tr -dc '[:digit:]')
-    # Counts the number of characters in the latestVersionCondensed variable.
-    # Example: 567 = 3
-    latestVersionDigitCount=${#latestVersionCondensed}
-
-    latestVersionCondensedFirstCharacter=${latestVersionCondensed:0:1}
-  fi
-
-}
-
-#------------------------------------------------------------------------------#
-
-function checkVersionFirstCharacter() {
-  if [[ "${latestVersionCondensedFirstCharacter}" -ge "${installedVersionCondensedFirstCharacter}" ]]; then
-    echo "`date` - Latest version first digit: ${latestVersionCondensedFirstCharacter}"
-    echo "`date` - Installed version first digit: ${installedVersionCondensedFirstCharacter}"
-    echo "`date` - Is ${latestVersionCondensedFirstCharacter} greater than or equal to ${installedVersionCondensedFirstCharacter}: Yes"
-
-    checkVersionCharacterCount
-
-  elif [[ "${latestVersionCondensedFirstCharacter}" -lt "${installedVersionCondensedFirstCharacter}" ]]; then
-    echo "`date` - Latest version first digit: ${latestVersionCondensedFirstCharacter}"
-    echo "`date` - Installed version first digit: ${installedVersionCondensedFirstCharacter}"
-    echo "`date` - Is ${latestVersionCondensedFirstCharacter} greater than or equal to ${installedVersionCondensedFirstCharacter}: No"
-    echo "`date` - Prepending 0 to installed version number since it appears greater than the latest version, but it's actually not."
-    installedVersionCondensed="0${installedVersionCondensed}"
-    installedVersionDigitCount=${#installedVersionCondensed}
-    checkVersionCharacterCount
-
-  fi
-}
-
-#------------------------------------------------------------------------------#
-
-# Checks the number of digits in the latest version compared to the installed version.
-function checkVersionCharacterCount() {
-
-  if [[ "${latestVersionDigitCount}" == "${installedVersionDigitCount}" ]]; then
-    echo "`date` - Does digit count for each version match: Yes"
+  elif [[ "${definedLatestVersion}" == "NA" && "${latestVersion}" != "" ]]; then
     compareVersions
 
-  elif [[ "${latestVersionDigitCount}" -gt "${installedVersionDigitCount}" ]]; then
-    echo "`date` - Does digit count for each version match: No"
+  elif [[ "${definedLatestVersion}" != "NA" && "${latestVersion}" == "" ]]; then
+    latestVersion="${definedLatestVersion}"
+    compareVersions
 
-    until [[ "${latestVersionDigitCount}" == "${installedVersionDigitCount}" ]]; do
-      echo "`date` - Adding appropriate number of zeroes to installed version..."
-
-      # Adds a zero to end of the condensed installed version number.
-      installedVersionCondensedZeroes="${installedVersionCondensed}0"
-
-      # Counts the number of digits in installedVersionCondensedZeroes variable.
-      installedVersionDigitCount=${#installedVersionCondensedZeroes}
-
-      # Updates the installedVersionCondensed variable with the new version of zeroes.
-      installedVersionCondensed="${installedVersionCondensedZeroes}"
-    done
-    checkVersionCharacterCount
-
-  elif [[ "${latestVersionDigitCount}" -lt "${installedVersionDigitCount}" ]]; then
-    echo "`date` - Does digit count for each version match: No"
-
-    until [[ "${latestVersionDigitCount}" == "${installedVersionDigitCount}" ]]; do
-      echo "`date` - Adding appropriate number of zeroes to latest version..."
-
-      # Adds a zero to end of the condensed latest version number.
-      latestVersionCondensedZeroes="${latestVersionCondensed}0"
-
-      # Counts the number of digits in latestVersionCondensedZeroes variable.
-      latestVersionDigitCount=${#latestVersionCondensedZeroes}
-
-      # Updates the latestVersionCondensed variable with the new version of zeroes.
-      latestVersionCondensed="${latestVersionCondensedZeroes}"
-    done
-    checkVersionCharacterCount
+  else
+    echo "`date` - Error at function: ${funcstack[1]}"
+    echo "`date` - Error details: Check the function, variables, and paramters within the function."
+    echo "`date` - Abort mission..."
+    exit 1
   fi
-
 }
 
 #------------------------------------------------------------------------------#
 
-# Compares the installed version with the latest version.
 function compareVersions() {
 
   echo "`date` - Installed version: ${installedVersion}"
   echo "`date` - Latest version: ${latestVersion}"
-  echo "`date` - Installed version condensed: ${installedVersionCondensed}"
-  echo "`date` - Latest version condensed: ${latestVersionCondensed}"
-  echo "`date` - Installed version digit count: ${installedVersionDigitCount}"
-  echo "`date` - Latest version digit count: ${latestVersionDigitCount}"
 
-  if [[ "${latestVersionCondensed}" == "" || "${latestVersionCondensed}" == "0" || "${latestVersionCondensed}" == "NA" ]]; then
-    echo "`date` - The latest version could not be obtained."
-    echo "`date` - Check the 'latestVersion' variable in the script."
+  sortVersions=$(printf '%s\n' "${latestVersion}" "${installedVersion}" | sort -V 2>&1)
+  getLowestValue=$(echo "${sortVersions}" | head -1)
+  getHighestValue=$(echo "${sortVersions}" | tail -1)
+
+  if [[ "${installedVersion}" == "" ]]; then
+    echo "`date` - Error at function: ${funcstack[1]}"
+    echo "`date` - Error details: installedVersion variable is blank."
     echo "`date` - Abort mission..."
     exit 1
-  elif [[ "${installedVersionCondensed}" == "" || "${installedVersionCondensed}" == "0" || "${installedVersionCondensed}" == "NA" ]]; then
-    echo "`date` - The installed version could not be obtained."
-    echo "`date` - Check the 'installedVersion' variable in the script."
+  elif [[ "${latestVersion}" == "" ]]; then
+    echo "`date` - Error at function: ${funcstack[1]}"
+    echo "`date` - Error details: latestVersion variable is blank."
     echo "`date` - Abort mission..."
     exit 1
-  elif [[ "${installedVersionCondensed}" == "${latestVersionCondensed}" ]]; then
-    echo "`date` - Is the latest version of ${appName} installed: Yes"
-    echo "`date` - Abort mission..."
-    cleanUp
-    exit 0
-  elif [[ "${installedVersionCondensed}" -gt "${latestVersionCondensed}" ]]; then
-    echo "`date` - Is the latest version of ${appName} installed: Yes"
-    echo "`date` - A newer version of ${appName} is installed than that available from the app's site."
-    echo "`date` - Abort mission..."
-    cleanUp
-    exit 0
   else
-    echo "`date` - Is the latest version of ${appName} installed: No"
-    appProcessVariables
+    if [[ "${installedVersion}" == "${getHighestValue}" ]]; then
+      echo "`date` - Is the latest version of ${appName} installed: Yes"
+      echo "`date` - Abort mission..."
+      cleanUp
+      exit 0
+    elif [[ "${installedVersion}" == "${getLowestValue}" ]]; then
+      echo "`date` - Is the latest version of ${appName} installed: No"
+      appProcessVariables
+    else
+      echo "`date` - Error at function: ${funcstack[1]}"
+      echo "`date` - Error details: installedVersion variable is not equal to either the getHighestValue or getLowestValue variable."
+      echo "`date` - Abort mission..."
+      exit 1
+    fi
   fi
-
 }
 
 #------------------------------------------------------------------------------#
@@ -1405,7 +1457,7 @@ function appProcessVariables() {
 
   if [[ "${appProcessName}" == "" ]]; then
     echo "`date` - Error at function: ${funcstack[1]}"
-    echo "`date` - Error details: appProcessName variable cannot be defined."
+    echo "`date` - Error details: appProcessName variable is blank."
     echo "`date` - Abort mission..."
     exit 1
   else
@@ -1464,7 +1516,7 @@ function checkPromptSettings() {
 function deferralVariables() {
   # The location of the deferral log file that's created with this script.
   # _d stands for deferral.
-  jamfHelperDeferralLog="/Library/Logs/jamf_${appNameCondensed}_d.log"
+  jamfHelperDeferralLog="/Library/Logs/jamf_${appNameUnderscore}_d.log"
 
   # Prints today's date in the format of: YYYYMMDD
   todaysDate=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%Y%m%d")
@@ -1485,19 +1537,23 @@ function deferralVariables() {
 
 function checkDeferralDate() {
 
+  echo ""
+  echo "`date` - Checking deferral settings..."
+
   if [[ "${deferralDays}" == "NA" ]]; then
-    echo "`date` - No deferral limit set."
+    echo "`date` - Is a deferral limit set: No"
     echo "`date` - Abort mission..."
     debugEnd
     exit 1
 
   else
-    if [[ -f ${jamfHelperDeferralLog} ]]; then ### if a regular file exists at the specified path of the jamfHelperDeferralLog variable, then...
+    echo "`date` - Is a deferral limit set: Yes"
+    if [[ -f ${jamfHelperDeferralLog} ]]; then
       echo "`date` - Does deferral log exist: Yes"
       deferralDeadline=$(cat ${jamfHelperDeferralLog} | head -1)
       deferralCreated=$(cat ${jamfHelperDeferralLog} | tail -1)
       originalDeferralDays=$(( ( ${deferralDeadline} - ${deferralCreated} )/(86400) ))
-      echo "`date` - Original deferralDays variable was set to: ${originalDeferralDays}"
+      echo "`date` - deferralDays variable was set to: ${originalDeferralDays}"
 
       if [[ "${originalDeferralDays}" != "${deferralDays}" ]]; then
         echo "`date` - Does deferralDays variable match from the last run: No"
@@ -1536,6 +1592,7 @@ function checkDeferralDate() {
       echo "`date` - Number of days remaining to defer update: ${deferralDaysRemaining}"
       echo "`date` - Prompt user regarding deferral limit: Yes"
       echo "`date` - Prompt type: deferralPrompt"
+      echo "`date` - Abort mission..."
       deferralPrompt
       debugEnd
       exit 1
@@ -1548,7 +1605,7 @@ function checkDeferralDate() {
 function checkDeferral() {
   if [[ "${deferralDaysRemaining}" -le "0" ]]; then
     echo "`date` - Has deferral limit been reached: Yes"
-    echo "`date` - Prompt user regarding deferral limit: Yes"
+    echo "`date` - Prompt user deferral limit reached: Yes"
     echo "`date` - Prompt type: finalDeferralPrompt"
 
     finalDeferralPrompt
@@ -1561,6 +1618,7 @@ function checkDeferral() {
     deferralDaysRemaining=$(( ( ${deferralDeadline} - ${todaysDateEpoch} )/(86400) ))
     echo "`date` - Prompt user regarding deferral limit: Yes"
     echo "`date` - Prompt type: deferralPrompt"
+    echo "`date` - Abort mission..."
     deferralPrompt
     debugEnd
     exit 1
@@ -1570,6 +1628,9 @@ function checkDeferral() {
 #------------------------------------------------------------------------------#
 
 function quitAppPreCheck() {
+  echo ""
+  echo "`date` - Attempting to quit ${appName}..."
+
   if [[ "${appState}" == "ON" && "${appName}" == "Docker" ]]; then
     quitAppDocker
   else
@@ -1579,6 +1640,9 @@ function quitAppPreCheck() {
 
 #------------------------------------------------------------------------------#
 
+# This needs to run first so the script doesn't attempt to quit Docker first.
+# If there is an attempt to quit Docker first, it will fail.
+# The user will then be prompted to quit Docker, but won't be able to because the app will be frozen.
 function quitAppDocker() {
   echo "`date` - ${appName} must be quit manually by the user."
   echo "`date` - Prompting user to manually quit ${appName}..."
@@ -1612,7 +1676,6 @@ function quitAppDocker() {
 # Force quit the app if it's running.
 function quitApp() {
   if [[ "${appState}" == "ON" ]]; then
-    echo "`date` - Attempting to quit ${appName}..."
     killall "${appProcessName}"
     sleep 1
     confirmAppQuit=$(pgrep "${appProcessName}")
@@ -1630,7 +1693,7 @@ function quitApp() {
         quitApp
       elif [[ "${jamfHelperQuitAppPrompt}" == "2" ]]; then
         echo "`date` - Error at function: ${funcstack[1]}"
-        echo "`date` - Error details: ${appName} was not quit and the user chose to cancel the update."
+        echo "`date` - Error details: User chose to cancel the update."
         echo "`date` - Abort mission..."
         debugEnd
         exit 1
@@ -1662,7 +1725,7 @@ function displayUpdatingWindow() {
 
 function installerVariables() {
   # The path where the installer is downloaded. Installer is also renamed.
-  installerFullDirectory="/private/tmp/${appNameCondensed}.${installerType}"
+  installerFullDirectory="/private/tmp/${appNameUnderscore}.${installerType}"
 
   # A temp directory to relocate the original app while the new one is being installed.
   appTempDirectory="/usr/local"
@@ -1674,13 +1737,17 @@ function installerVariables() {
   volumeAppFullDirectory="/Volumes/${volumeName}/${appName}.app"
 
   # The pkg name within a dmg volume.
-  pkgInVolume="/Volumes/${volumeName}/${pkgName}.pkg"
+  if [[ "${pkgSubfoldersInVolume}" == "" ]]; then
+    pkgInVolumeDirectory="/Volumes/${volumeName}/${pkgNameInVolume}.pkg"
+  else
+    pkgInVolumeDirectory="/Volumes/${volumeName}/${pkgSubfoldersInVolume}/${pkgNameInVolume}.pkg"
+  fi
 
   # The path where the pkg will be downloaeded/moved to.
   pkgNewDirectory="/private/tmp"
 
   # The entire path where the pkg will be downloaeded/moved to.
-  pkgNewFullDirectory="${pkgNewDirectory}/${pkgName}.pkg"
+  pkgNewFullDirectory="${pkgNewDirectory}/${pkgNameInVolume}.pkg"
 
   cleanUpPreInstallCheck
 }
@@ -1689,7 +1756,7 @@ function installerVariables() {
 
 function cleanUpPreInstallCheck() {
   echo ""
-  echo "`date` - Preparing to download ${appName}..."
+  echo "`date` - Downloading ${appName} installer..."
   cleanUpPreInstall
   determineInstallerDownload
 }
@@ -1700,31 +1767,38 @@ function cleanUpPreInstallCheck() {
 function determineInstallerDownload() {
   echo "`date` - Determining which download URL to use..."
 
-  if [[ "${processorType}" == "Arm" ]]; then
+  if [[ "${processorType}" == "ARM" ]]; then
+    echo "`date` - Processor type: ARM"
 
     if [[ "${armDownloadURL}" != "" ]]; then
+      echo "`date` - Downloading ARM-specific installer..."
       installerDownloadType="arm"
       armDownload
     elif [[ "${universalDownloadURL}" != "" ]]; then
       echo "`date` - An ARM-specific installer is not specified in the script."
+      echo "`date` - Downloading a universal installer..."
       installerDownloadType="universal"
       universalDownload
     elif [[ "${intelDownloadURL}" != "" ]]; then
       echo "`date` - An ARM-specific installer is not specified in the script."
+      echo "`date` - Downloading an Intel installer..."
       installerDownloadType="intel"
       intelDownload
     else
-      echo "`date` - Error at function: ${funcstack[1]} (Arm)"
+      echo "`date` - Error at function: ${funcstack[1]} (ARM)"
       echo "`date` - Error details: The armDownloadURL, universalDownloadURL, and intelDownloadURL variables are blank."
     fi
 
   elif [[ "${processorType}" == "Intel" ]]; then
+    echo "`date` - Processor type: Intel"
 
     if [[ "${intelDownloadURL}" != "" ]]; then
+      echo "`date` - Downloading Intel-specific installer..."
       installerDownloadType="intel"
       intelDownload
     elif [[ "${universalDownloadURL}" != "" ]]; then
       echo "`date` - An Intel-specific installer is not specified in the script."
+      echo "`date` - Downloading a universal installer..."
       installerDownloadType="universal"
       universalDownload
     else
@@ -1750,8 +1824,6 @@ function determineInstallerDownload() {
 
 function armDownload() {
   downloadAttemptCounter=0
-  echo "`date` - Installer type: ARM"
-  echo "`date` - Downloading latest installer..."
 
   until [[ -a "${installerFullDirectory}" ]]; do
     ((downloadAttemptCounter++))
@@ -1788,8 +1860,6 @@ function armDownload() {
 
 function intelDownload() {
   downloadAttemptCounter=0
-  echo "`date` - Installer type: Intel"
-  echo "`date` - Downloading latest installer..."
 
   until [[ -a "${installerFullDirectory}" ]]; do
     ((downloadAttemptCounter++))
@@ -1826,8 +1896,6 @@ function intelDownload() {
 
 function universalDownload() {
   downloadAttemptCounter=0
-  echo "`date` - Installer type: Universal"
-  echo "`date` - Downloading latest installer..."
 
   until [[ -a "${installerFullDirectory}" ]]; do
     ((downloadAttemptCounter++))
@@ -1863,6 +1931,8 @@ function universalDownload() {
 #------------------------------------------------------------------------------#
 
 function checksumCheck() {
+  echo ""
+  echo "`date` - Checking installer checksums..."
   if [[ "${checksumAvailable}" == "TRUE" ]]; then
     echo "`date` - Are checksums enforced: Yes"
     checksumVariables
@@ -1891,11 +1961,11 @@ function checksumCheck() {
 function checksumVariables() {
 
   # The path of the installer's checksum output.
-  installerChecksumFullDirectory="/private/tmp/${appNameCondensed}-Installer-Checksum.txt"
+  installerChecksumFullDirectory="/private/tmp/${appNameUnderscore}-Installer-Checksum.txt"
 
   # The path the installer checksum is downlaoded to. It's also renamed.
   # Do not modify this variable. It must remain here.
-  checksumFullDirectory="/private/tmp/${appNameCondensed}-Site-Checksum.txt"
+  checksumFullDirectory="/private/tmp/${appNameUnderscore}-Site-Checksum.txt"
 
   installerChecksum
 }
@@ -1909,9 +1979,11 @@ function installerChecksum() {
     siteChecksum="SHA256"
     shasum -a 256 ${installerFullDirectory} > ${installerChecksumFullDirectory}
     installerChecksum=$(cat ${installerChecksumFullDirectory} | awk '{print $1}')
+    echo "`date` - Checksum type: SHA-256"
     echo "`date` - SHA-256 of installer: ${installerChecksum}"
     latestChecksum
   elif [[ "${#armChecksum}" == "128" || "${#intelChecksum}" == "128" || "${#universalChecksum}" == "128" ]]; then
+    echo "`date` - Checksum type: SHA-512"
     siteChecksum="SHA512"
     shasum -a 512 ${installerFullDirectory} > ${installerChecksumFullDirectory}
     installerChecksum=$(cat ${installerChecksumFullDirectory} | awk '{print $1}')
@@ -1919,7 +1991,7 @@ function installerChecksum() {
     latestChecksum
   else
     echo "`date` - Error at function: ${funcstack[1]}"
-    echo "`date` - Error details: Character count of checksums could not be completed."
+    echo "`date` - Error details: Character count of checksums could not be determined."
     echo "`date` - Abort mission..."
     exit 1
   fi
@@ -1940,6 +2012,7 @@ function latestChecksum() {
       verifyChecksums
     else
       echo "`date` - Error at function: ${funcstack[1]}"
+      echo "`date` - Error details: siteChecksum variable could not be determined."
       abortMission
     fi
 
@@ -1954,6 +2027,7 @@ function latestChecksum() {
       verifyChecksums
     else
       echo "`date` - Error at function: ${funcstack[1]}"
+      echo "`date` - Error details: siteChecksum variable could not be determined."
       abortMission
     fi
 
@@ -1968,6 +2042,7 @@ function latestChecksum() {
       verifyChecksums
     else
       echo "`date` - Error at function: ${funcstack[1]}"
+      echo "`date` - Error details: siteChecksum variable could not be determined."
       abortMission
     fi
 
@@ -1983,12 +2058,10 @@ function latestChecksum() {
 # Compare checksums (if applicable).
 function verifyChecksums() {
   echo "`date` - Comparing checksums..."
-  echo "`date` - ${installerChecksum}"
-  echo "`date` - ${actualChecksum}"
 
   if [[ "${actualChecksum}" == "${installerChecksum}" ]]; then
     echo "`date` - Do checksums match: Yes"
-    echo "`date` - Safe to continue. Proceeding..."
+    echo "`date` - Safe to proceed with installation..."
 
     if [[ "${debugMode}" == "TRUE" ]]; then
       debugEnd
@@ -2068,7 +2141,7 @@ function determineInstaller() {
     installLatestFromPkgDmg
   else
     echo "`date` - Error at function: ${funcstack[1]}"
-    echo "`date` - Error details: Could not determine installer type."
+    echo "`date` - Error details: installerType variable could not be determined."
     abortMission
   fi
 }
@@ -2372,7 +2445,7 @@ function installLatestFromPkgDmg() {
     echo "`date` - Attaching dmg and opening volume..."
     hdiutil attach ${installerFullDirectory} -nobrowse -quiet
     echo "`date` - Extracting pkg from volume..."
-    ditto -rsrc "${pkgInVolume}" "${pkgNewDirectory}"
+    ditto -rsrc "${pkgInVolumeDirectory}" "${pkgNewDirectory}"
     echo "`date` - Opening and running pkg..."
     installer -pkg "${pkgNewFullDirectory}" -target /
     sleep 1
@@ -2414,25 +2487,25 @@ function checkLatestInstall() {
     newInstalledVersion=$(defaults read ${plistDirectory} ${plistVersionString})
 
     if [[ "${newInstalledVersion}" == "" || "${newInstalledVersion}" == "NA" ]]; then
-      echo "`date` - ${appName} installed successfully, but the version could not be obtained."
+      echo "`date` - ${appName} installed successfully, but the installed version could not be obtained."
       echo "`date` - Installed version: ${newInstalledVersion}"
-      echo "`date` - Update version: ${latestVersion}"
+      echo "`date` - Latest version: ${latestVersion}"
       checkTeamIdentifier
     elif [[ "${newInstalledVersion}" == "${latestVersion}" ]]; then
       echo "`date` - The latest version of ${appName} installed successfully."
       echo "`date` - Installed version: ${newInstalledVersion}"
-      echo "`date` - Update version: ${latestVersion}"
+      echo "`date` - Latest version: ${latestVersion}"
       checkTeamIdentifier
     else
       echo "`date` - ${appName} installed successfully, but the latest version and installed version do not match."
-      echo "`date` - Latest version: ${latestVersion}"
       echo "`date` - Installed version: ${newInstalledVersion}"
+      echo "`date` - Latest version: ${latestVersion}"
       checkTeamIdentifier
     fi
 
   else
     echo "`date` - Error at function: ${funcstack[1]}"
-    echo "`date` - Error details: The newly installed app is not at path: ${appFullHomeDirectory}."
+    echo "`date` - Error details: ${appName} does not exist in the ${appFullHomeDirectory} directory."
     abortMission
   fi
 
@@ -2443,12 +2516,24 @@ function checkLatestInstall() {
 function checkTeamIdentifier() {
   echo "`date` - Checking and comparing team identifiers..."
   installedTeamIdentifier=$(codesign -dv ${appFullHomeDirectory} 2>&1 | grep TeamIdentifier | cut -c 16-)
+
+  if [[ "${officialTeamIdentifier}" == "NA" ]]; then
+    echo "`date` - A TeamIdentifier is not defined in the script."
+    additionalInstallers
+  else
+    verifyTeamIdentifier
+  fi
+}
+
+#------------------------------------------------------------------------------#
+
+function verifyTeamIdentifier() {
   if [[ "${officialTeamIdentifier}" == "${installedTeamIdentifier}" ]]; then
     echo "`date` - Does team identifier match: Yes"
     additionalInstallers
   else
     echo "`date` - Does team identifier match: No"
-    echo "`date` - This version of the app may not be from the official developer."
+    echo "`date` - This version of ${appName} may not be legitimate."
     teamIdentifierCounter=0
 
     until [[ ! -a "${appFullHomeDirectory}" ]]; do
@@ -2477,8 +2562,9 @@ function checkTeamIdentifier() {
 # Stops the script from continuing if debug mode is enabled.
 function debugEnd() {
   if [[ "${debugMode}" == "TRUE" ]]; then
-    echo "`date` - Abort mission due to DEBUG mode enabled..."
-    echo "`date` - Note: Policy might show as failed if the last function to run has an exit code set to 1."
+    echo ""
+    echo "`date` - Stopping script due to DEBUG mode being enabled..."
+    echo "`date` - Note: Policy will show as Completed or Failed based on the exit code of the function that ran before the debugEnd function."
     echo "`date` - * * * * * * * * * * End of DEBUG * * * * * * * * * *"
   else
     :
@@ -2490,7 +2576,7 @@ function debugEnd() {
 function additionalInstallers() {
   if [[ "${appName}" == "Wireshark" ]]; then
     echo "`date` - Installing additional packages for Wireshark..."
-    echo "`date` - Attempting to install Install ChmodBPF.pkg..."
+    echo "`date` - Attempting to install package: Install ChmodBPF.pkg"
     installer -pkg "/Applications/Wireshark.app/Contents/Resources/Extras/Install ChmodBPF.pkg" -target /
     modifyApp
   else
@@ -2532,16 +2618,16 @@ function cleanUpPreInstall() {
   rm -rf "/usr/local/${appName}.app"
 
   # Deletes the downloaded installer from the /private/tmp directory.
-  rm -rf "/private/tmp/${appNameCondensed}.${installerType}"
+  rm -rf "/private/tmp/${appNameUnderscore}.${installerType}"
 
   # Deletes the installer checksum file.
-  rm -rf "/private/tmp/${appNameCondensed}-Installer-Checksum.txt"
+  rm -rf "/private/tmp/${appNameUnderscore}-Installer-Checksum.txt"
 
   # Deletes the checksum file created or downloaded from the app's site.
-  rm -rf "/private/tmp/${appNameCondensed}-Site-Checksum.txt"
+  rm -rf "/private/tmp/${appNameUnderscore}-Site-Checksum.txt"
 
   # Deletes the PKG file for the installer.
-  rm -rf "/private/tmp/${pkgName}.pkg"
+  rm -rf "/private/tmp/${pkgNameInVolume}.pkg"
 
   # Deletes any previously unzipped temp files from the /private/tmp directory.
   rm -rf "/private/tmp/__MACOSX"
@@ -2564,19 +2650,19 @@ function cleanUp() {
   rm -rf "/usr/local/${appName}.app"
 
   # Deletes the downloaded installer from the /private/tmp directory.
-  rm -rf "/private/tmp/${appNameCondensed}.${installerType}"
+  rm -rf "/private/tmp/${appNameUnderscore}.${installerType}"
 
   # Deletes the installer checksum file.
-  rm -rf "/private/tmp/${appNameCondensed}-Installer-Checksum.txt"
+  rm -rf "/private/tmp/${appNameUnderscore}-Installer-Checksum.txt"
 
   # Deletes the checksum file created or downloaded from the app's site.
-  rm -rf "/private/tmp/${appNameCondensed}-Site-Checksum.txt"
+  rm -rf "/private/tmp/${appNameUnderscore}-Site-Checksum.txt"``
 
   # Deletes the PKG file for the installer.
-  rm -rf "/private/tmp/${pkgName}.pkg"
+  rm -rf "/private/tmp/${pkgNameInVolume}.pkg"
 
   # Deletes the deferral log.
-  rm -rf "/Library/Logs/jamf_${appNameCondensed}_d.log"
+  rm -rf "/Library/Logs/jamf_${appNameUnderscore}_d.log"
 
   # Deletes any previously unzipped temp files from the /private/tmp directory.
   rm -rf "/private/tmp/__MACOSX"
@@ -2586,6 +2672,9 @@ function cleanUp() {
 
   # Deletes any previously attempted app.tar files.
   rm -rf "/private/tmp/${appName}.app.tar"
+
+  debugEnd
+
 }
 
 #------------------------------------------------------------------------------#
