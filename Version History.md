@@ -1,17 +1,23 @@
 # Versions
 
-**Version 2022.06.03**
+**Version 2022.06.13**
 - Added the following apps:
-   - Adobe Acrobat DC (still in testing stages, do not use)
-   - Adobe Acrobat Reader DC (still in testing stages, do not use)
-   - Adobe Creative Cloud (still in testing stages, do not use)
+   - Adobe Acrobat DC
+   - Adobe Acrobat Reader DC
+   - Adobe Creative Cloud
    - Appium Server GUI
    - Appium Inspector
+- Removed date from every echo command for Jamf logging readability
+   - Added date for each section instead
+- Added missing function to the installedVersionVariables function
+- Added version compare functionality to the latestVersionVariables function
+- Added curl command to latestVersion variable for Miro 
+- Renamed app functions to match app name in Applications folder
 - Renamed some variables
 - Fixed FileZilla universalChecksum
 - Fixed pgAdmin latestVersion
-- Updated comments and echo commands for logging legibility 
-- Simplified the version compare functions by utilizing sort -V 
+- Simplified the version compare functions by utilizing sort -V
+- Added rm -rf for older log file names
 
 **Version 2022.05.30**
 - Added Support App (from root3nl software) and FileZilla app
