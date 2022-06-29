@@ -1,5 +1,27 @@
 # Versions
 
+**Version 2022.06.29**
+- Added the following apps:
+   - iTerm2
+   - Microsoft Remote Desktop
+   - Postgres
+   - SecureCRT (requires Jamf package)
+- Added app function variable fefinitions
+- Added template for a new app function
+- Deleted empty variables from all app functions
+- Added updateNotifyOnlyCheck function
+   - Update notification prompt for Jamf admins
+   - Lets Jamf admins know of app updates that are deployed by a Jamf package and not in Patch Management
+- Minor JamfHelper prompt rewording
+- Restructered IF statements
+- Added appFunctionCheck function
+   - Performs a simple check of the variables defined within the app's function
+- Removed checksumAvailable variable
+   - Not needed and uses logic based on other variables
+- Added a jamf.package.zip installer type
+   - For apps that are packaged and deployed via Jamf package
+- Renamed officialTeamIdentifier to teamIdentifier
+
 **Version 2022.06.13**
 - Added the following apps:
    - Adobe Acrobat DC
